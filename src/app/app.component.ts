@@ -13,7 +13,7 @@ import { DARK_MODE_CLASS_NAME } from './shared/dark-mode-class-name';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CompaniesComponent, HeaderComponent],
+  imports: [CompaniesComponent, HeaderComponent, RouterOutlet],
   providers: [ApiService],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
