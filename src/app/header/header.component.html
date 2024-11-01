@@ -1,0 +1,25 @@
+@let isDarkModeValue = isDarkMode();
+
+<p-menubar [model]="menuItems">
+  <ng-template pTemplate="start">
+    <p-button
+      [styleClass]="isDarkModeValue ? 'text-white' : 'text-black'"
+      icon="fa-solid fa-user-tie-hair"
+      rounded="true"
+      severity="secondary"
+      size="large"
+      text="true"
+      [routerLink]="['/']"
+    />
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <p-button
+      [icon]="isDarkModeValue ? 'fa fa-moon' : 'fa fa-sun-bright'"
+      rounded="true"
+      severity="secondary"
+      text="true"
+      (click)="toggleDarkMode()"
+    />
+  </ng-template>
+</p-menubar>

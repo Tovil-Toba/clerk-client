@@ -1,0 +1,14 @@
+@let companies = companies$ | async;
+
+<pre>
+  {{ companies | json }}
+</pre>
+
+<h3 class="my-2 text-xl font-medium">Названия компаний</h3>
+@if (companies) {
+  @for (company of companies; track company.id) {
+    <li>{{ company.name }}</li>
+  } @empty {
+    <li>There are no items.</li>
+  }
+}
