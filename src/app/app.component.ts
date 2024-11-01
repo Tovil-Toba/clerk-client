@@ -23,8 +23,6 @@ export class AppComponent {
   private readonly _darkModeService = inject(DarkModeService);
   private readonly _primengConfig = inject(PrimeNGConfig);
 
-  title = 'clerk-client';
-
   constructor() {
     this._apiConfiguration.rootUrl = 'http://localhost:3000';
 
