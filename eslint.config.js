@@ -5,7 +5,7 @@ const angular = require("angular-eslint");
 const simpleImportSort = require("eslint-plugin-simple-import-sort");
 const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 const tailwind = require("eslint-plugin-tailwindcss");
-// todo: const sonarjs = require("eslint-plugin-sonarjs");
+const sonarjs = require("eslint-plugin-sonarjs");
 
 
 module.exports = tseslint.config(
@@ -17,11 +17,11 @@ module.exports = tseslint.config(
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
       eslintPluginPrettierRecommended,
+      sonarjs.configs.recommended,
     ],
     processor: angular.processInlineTemplates,
     plugins: {
       "simple-import-sort": simpleImportSort,
-
     },
     rules: {
       "@angular-eslint/directive-selector": [
@@ -50,7 +50,7 @@ module.exports = tseslint.config(
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
       eslintPluginPrettierRecommended,
-      ...tailwind.configs["flat/recommended"]
+      ...tailwind.configs["flat/recommended"],
     ],
     rules: {},
   },
