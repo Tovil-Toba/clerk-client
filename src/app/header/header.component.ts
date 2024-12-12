@@ -26,7 +26,7 @@ export class HeaderComponent {
 
   protected readonly menuItems: MenuItem[] = HEADER_MENU_ITEMS;
 
-  toggleDarkMode(): void {
+  protected toggleDarkMode(): void {
     this._darkModeService.toggleDarkMode();
   }
 }

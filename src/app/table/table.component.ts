@@ -88,7 +88,7 @@ export abstract class TableComponent implements OnInit {
       closable: true,
       data: {
         item: this.item,
-        submit: (item: Item) => this.submit(item),
+        submit: (item: Item) => this._submit(item),
       },
       draggable: true,
       header: this.dialogHeader,
@@ -117,7 +117,7 @@ export abstract class TableComponent implements OnInit {
     this.tableService.sort(event);
   }
 
-  private submit(item: Item): void {
+  private _submit(item: Item): void {
     if (this.item?.id) {
       this.tableService.update({ id: this.item.id, body: item });
     } else {
