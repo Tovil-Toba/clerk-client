@@ -8,8 +8,8 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CompanyCategory } from '../../models/company-category';
 import { UpdateCompanyCategoryDto } from '../../models/update-company-category-dto';
-import { UpdateResultDto } from '../../models/update-result-dto';
 
 export interface CompanyCategoriesControllerUpdate$Params {
 
@@ -20,7 +20,7 @@ export interface CompanyCategoriesControllerUpdate$Params {
       body: UpdateCompanyCategoryDto
 }
 
-export function companyCategoriesControllerUpdate(http: HttpClient, rootUrl: string, params: CompanyCategoriesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+export function companyCategoriesControllerUpdate(http: HttpClient, rootUrl: string, params: CompanyCategoriesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<CompanyCategory>> {
   const rb = new RequestBuilder(rootUrl, companyCategoriesControllerUpdate.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -32,7 +32,7 @@ export function companyCategoriesControllerUpdate(http: HttpClient, rootUrl: str
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UpdateResultDto>;
+      return r as StrictHttpResponse<CompanyCategory>;
     })
   );
 }

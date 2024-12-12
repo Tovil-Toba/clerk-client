@@ -23,6 +23,7 @@
     "@eslint/js": "^9.11.1",
     "ng-openapi-gen": "^0.52.0",
     "ngx-webstorage": "^18.0.0",
+    "primeicons": "^7.0.0",
     "primeng": "^18.0.0-beta.3",
     "rxjs": "~7.8.0",
     "tailwindcss-primeui": "^0.3.4",

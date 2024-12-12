@@ -10,6 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 
 import { BooleanFilterEnum } from '../../models/boolean-filter-enum';
 import { DateFilterEnum } from '../../models/date-filter-enum';
+import { FindAllCompaniesDto } from '../../models/find-all-companies-dto';
 import { NumberFilterEnum } from '../../models/number-filter-enum';
 import { OrderEnum } from '../../models/order-enum';
 import { StringFilterEnum } from '../../models/string-filter-enum';
@@ -99,6 +100,27 @@ export interface CompaniesControllerFindAll$Params {
  * *Чем меньше, тем приоритетнее*
  */
   'emails-orderPlace'?: number;
+
+/**
+ * **Сфера деятельности**
+ */
+  fieldOfActivity?: string;
+
+/**
+ * Фильтр
+ */
+  'fieldOfActivity-filter'?: StringFilterEnum;
+
+/**
+ * Порядок сортировки
+ */
+  'fieldOfActivity-order'?: OrderEnum;
+
+/**
+ * Приоритет сортировки  
+ * *Чем меньше, тем приоритетнее*
+ */
+  'fieldOfActivity-orderPlace'?: number;
 
 /**
  * **Идентификатор**
@@ -201,6 +223,27 @@ export interface CompaniesControllerFindAll$Params {
   'name-orderPlace'?: number;
 
 /**
+ * **Примечания**
+ */
+  notes?: string;
+
+/**
+ * Фильтр
+ */
+  'notes-filter'?: StringFilterEnum;
+
+/**
+ * Порядок сортировки
+ */
+  'notes-order'?: OrderEnum;
+
+/**
+ * Приоритет сортировки  
+ * *Чем меньше, тем приоритетнее*
+ */
+  'notes-orderPlace'?: number;
+
+/**
  * **Телефоны**
  */
   phones?: string;
@@ -296,7 +339,7 @@ export interface CompaniesControllerFindAll$Params {
   limit?: number;
 }
 
-export function companiesControllerFindAll(http: HttpClient, rootUrl: string, params?: CompaniesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+export function companiesControllerFindAll(http: HttpClient, rootUrl: string, params?: CompaniesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllCompaniesDto>> {
   const rb = new RequestBuilder(rootUrl, companiesControllerFindAll.PATH, 'get');
   if (params) {
     rb.query('category.name', params['category.name'], {"explode":false});
@@ -315,6 +358,10 @@ export function companiesControllerFindAll(http: HttpClient, rootUrl: string, pa
     rb.query('emails-filter', params['emails-filter'], {"explode":false});
     rb.query('emails-order', params['emails-order'], {"explode":false});
     rb.query('emails-orderPlace', params['emails-orderPlace'], {});
+    rb.query('fieldOfActivity', params.fieldOfActivity, {"explode":false});
+    rb.query('fieldOfActivity-filter', params['fieldOfActivity-filter'], {"explode":false});
+    rb.query('fieldOfActivity-order', params['fieldOfActivity-order'], {"explode":false});
+    rb.query('fieldOfActivity-orderPlace', params['fieldOfActivity-orderPlace'], {});
     rb.query('id', params.id, {"explode":false});
     rb.query('id-filter', params['id-filter'], {"explode":false});
     rb.query('id-order', params['id-order'], {"explode":false});
@@ -334,6 +381,10 @@ export function companiesControllerFindAll(http: HttpClient, rootUrl: string, pa
     rb.query('name-filter', params['name-filter'], {"explode":false});
     rb.query('name-order', params['name-order'], {"explode":false});
     rb.query('name-orderPlace', params['name-orderPlace'], {});
+    rb.query('notes', params.notes, {"explode":false});
+    rb.query('notes-filter', params['notes-filter'], {"explode":false});
+    rb.query('notes-order', params['notes-order'], {"explode":false});
+    rb.query('notes-orderPlace', params['notes-orderPlace'], {});
     rb.query('phones', params.phones, {"explode":false});
     rb.query('phones-filter', params['phones-filter'], {"explode":false});
     rb.query('phones-order', params['phones-order'], {"explode":false});
@@ -359,7 +410,7 @@ export function companiesControllerFindAll(http: HttpClient, rootUrl: string, pa
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<any>>;
+      return r as StrictHttpResponse<FindAllCompaniesDto>;
     })
   );
 }

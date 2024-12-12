@@ -16,6 +16,8 @@ import { contactOffersControllerCreate } from '../fn/contact-offers/contact-offe
 import { ContactOffersControllerCreate$Params } from '../fn/contact-offers/contact-offers-controller-create';
 import { contactOffersControllerFindAll } from '../fn/contact-offers/contact-offers-controller-find-all';
 import { ContactOffersControllerFindAll$Params } from '../fn/contact-offers/contact-offers-controller-find-all';
+import { contactOffersControllerFindNames } from '../fn/contact-offers/contact-offers-controller-find-names';
+import { ContactOffersControllerFindNames$Params } from '../fn/contact-offers/contact-offers-controller-find-names';
 import { contactOffersControllerFindOne } from '../fn/contact-offers/contact-offers-controller-find-one';
 import { ContactOffersControllerFindOne$Params } from '../fn/contact-offers/contact-offers-controller-find-one';
 import { contactOffersControllerRemove } from '../fn/contact-offers/contact-offers-controller-remove';
@@ -23,7 +25,8 @@ import { ContactOffersControllerRemove$Params } from '../fn/contact-offers/conta
 import { contactOffersControllerUpdate } from '../fn/contact-offers/contact-offers-controller-update';
 import { ContactOffersControllerUpdate$Params } from '../fn/contact-offers/contact-offers-controller-update';
 import { DeleteResultDto } from '../models/delete-result-dto';
-import { UpdateResultDto } from '../models/update-result-dto';
+import { FindAllContactOffersDto } from '../models/find-all-contact-offers-dto';
+import { FindNamesResultDto } from '../models/find-names-result-dto';
 
 
 /**
@@ -44,7 +47,7 @@ export class ContactOffersService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactOffersControllerFindAll$Response(params?: ContactOffersControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+  contactOffersControllerFindAll$Response(params?: ContactOffersControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactOffersDto>> {
     return contactOffersControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +57,9 @@ export class ContactOffersService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactOffersControllerFindAll(params?: ContactOffersControllerFindAll$Params, context?: HttpContext): Observable<Array<any>> {
+  contactOffersControllerFindAll(params?: ContactOffersControllerFindAll$Params, context?: HttpContext): Observable<FindAllContactOffersDto> {
     return this.contactOffersControllerFindAll$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<any>>): Array<any> => r.body)
+      map((r: StrictHttpResponse<FindAllContactOffersDto>): FindAllContactOffersDto => r.body)
     );
   }
 
@@ -82,6 +85,31 @@ export class ContactOffersService extends BaseService {
   contactOffersControllerCreate(params: ContactOffersControllerCreate$Params, context?: HttpContext): Observable<ContactOffer> {
     return this.contactOffersControllerCreate$Response(params, context).pipe(
       map((r: StrictHttpResponse<ContactOffer>): ContactOffer => r.body)
+    );
+  }
+
+  /** Path part for operation `contactOffersControllerFindNames()` */
+  static readonly ContactOffersControllerFindNamesPath = '/contact-offers/names';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `contactOffersControllerFindNames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  contactOffersControllerFindNames$Response(params?: ContactOffersControllerFindNames$Params, context?: HttpContext): Observable<StrictHttpResponse<FindNamesResultDto>> {
+    return contactOffersControllerFindNames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `contactOffersControllerFindNames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  contactOffersControllerFindNames(params?: ContactOffersControllerFindNames$Params, context?: HttpContext): Observable<FindNamesResultDto> {
+    return this.contactOffersControllerFindNames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FindNamesResultDto>): FindNamesResultDto => r.body)
     );
   }
 
@@ -144,7 +172,7 @@ export class ContactOffersService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactOffersControllerUpdate$Response(params: ContactOffersControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+  contactOffersControllerUpdate$Response(params: ContactOffersControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<ContactOffer>> {
     return contactOffersControllerUpdate(this.http, this.rootUrl, params, context);
   }
 
@@ -154,9 +182,9 @@ export class ContactOffersService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactOffersControllerUpdate(params: ContactOffersControllerUpdate$Params, context?: HttpContext): Observable<UpdateResultDto> {
+  contactOffersControllerUpdate(params: ContactOffersControllerUpdate$Params, context?: HttpContext): Observable<ContactOffer> {
     return this.contactOffersControllerUpdate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UpdateResultDto>): UpdateResultDto => r.body)
+      map((r: StrictHttpResponse<ContactOffer>): ContactOffer => r.body)
     );
   }
 

@@ -15,6 +15,8 @@ import { companiesControllerCreate } from '../fn/companies/companies-controller-
 import { CompaniesControllerCreate$Params } from '../fn/companies/companies-controller-create';
 import { companiesControllerFindAll } from '../fn/companies/companies-controller-find-all';
 import { CompaniesControllerFindAll$Params } from '../fn/companies/companies-controller-find-all';
+import { companiesControllerFindNames } from '../fn/companies/companies-controller-find-names';
+import { CompaniesControllerFindNames$Params } from '../fn/companies/companies-controller-find-names';
 import { companiesControllerFindOne } from '../fn/companies/companies-controller-find-one';
 import { CompaniesControllerFindOne$Params } from '../fn/companies/companies-controller-find-one';
 import { companiesControllerRemove } from '../fn/companies/companies-controller-remove';
@@ -23,7 +25,8 @@ import { companiesControllerUpdate } from '../fn/companies/companies-controller-
 import { CompaniesControllerUpdate$Params } from '../fn/companies/companies-controller-update';
 import { Company } from '../models/company';
 import { DeleteResultDto } from '../models/delete-result-dto';
-import { UpdateResultDto } from '../models/update-result-dto';
+import { FindAllCompaniesDto } from '../models/find-all-companies-dto';
+import { FindNamesResultDto } from '../models/find-names-result-dto';
 
 
 /**
@@ -44,7 +47,7 @@ export class CompaniesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  companiesControllerFindAll$Response(params?: CompaniesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+  companiesControllerFindAll$Response(params?: CompaniesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllCompaniesDto>> {
     return companiesControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +57,9 @@ export class CompaniesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  companiesControllerFindAll(params?: CompaniesControllerFindAll$Params, context?: HttpContext): Observable<Array<any>> {
+  companiesControllerFindAll(params?: CompaniesControllerFindAll$Params, context?: HttpContext): Observable<FindAllCompaniesDto> {
     return this.companiesControllerFindAll$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<any>>): Array<any> => r.body)
+      map((r: StrictHttpResponse<FindAllCompaniesDto>): FindAllCompaniesDto => r.body)
     );
   }
 
@@ -82,6 +85,31 @@ export class CompaniesService extends BaseService {
   companiesControllerCreate(params: CompaniesControllerCreate$Params, context?: HttpContext): Observable<Company> {
     return this.companiesControllerCreate$Response(params, context).pipe(
       map((r: StrictHttpResponse<Company>): Company => r.body)
+    );
+  }
+
+  /** Path part for operation `companiesControllerFindNames()` */
+  static readonly CompaniesControllerFindNamesPath = '/companies/names';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `companiesControllerFindNames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  companiesControllerFindNames$Response(params?: CompaniesControllerFindNames$Params, context?: HttpContext): Observable<StrictHttpResponse<FindNamesResultDto>> {
+    return companiesControllerFindNames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `companiesControllerFindNames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  companiesControllerFindNames(params?: CompaniesControllerFindNames$Params, context?: HttpContext): Observable<FindNamesResultDto> {
+    return this.companiesControllerFindNames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FindNamesResultDto>): FindNamesResultDto => r.body)
     );
   }
 
@@ -144,7 +172,7 @@ export class CompaniesService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  companiesControllerUpdate$Response(params: CompaniesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+  companiesControllerUpdate$Response(params: CompaniesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<Company>> {
     return companiesControllerUpdate(this.http, this.rootUrl, params, context);
   }
 
@@ -154,9 +182,9 @@ export class CompaniesService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  companiesControllerUpdate(params: CompaniesControllerUpdate$Params, context?: HttpContext): Observable<UpdateResultDto> {
+  companiesControllerUpdate(params: CompaniesControllerUpdate$Params, context?: HttpContext): Observable<Company> {
     return this.companiesControllerUpdate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UpdateResultDto>): UpdateResultDto => r.body)
+      map((r: StrictHttpResponse<Company>): Company => r.body)
     );
   }
 

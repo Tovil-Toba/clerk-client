@@ -17,6 +17,11 @@ export interface Company {
   categoryId?: number | null;
 
   /**
+   * Дата создания
+   */
+  createdAt: string;
+
+  /**
    * Адреса электронных почт
    */
   emails?: string;
@@ -75,6 +80,11 @@ export interface Company {
    * Издания
    */
   publications?: string;
+
+  /**
+   * Дата изменения
+   */
+  updatedAt: string;
 
   /**
    * Ссылки

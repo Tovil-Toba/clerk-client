@@ -10,6 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 
 import { BooleanFilterEnum } from '../../models/boolean-filter-enum';
 import { DateFilterEnum } from '../../models/date-filter-enum';
+import { FindAllManagersDto } from '../../models/find-all-managers-dto';
 import { NumberFilterEnum } from '../../models/number-filter-enum';
 import { OrderEnum } from '../../models/order-enum';
 import { StringFilterEnum } from '../../models/string-filter-enum';
@@ -212,7 +213,7 @@ export interface ManagersControllerFindAll$Params {
   limit?: number;
 }
 
-export function managersControllerFindAll(http: HttpClient, rootUrl: string, params?: ManagersControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+export function managersControllerFindAll(http: HttpClient, rootUrl: string, params?: ManagersControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllManagersDto>> {
   const rb = new RequestBuilder(rootUrl, managersControllerFindAll.PATH, 'get');
   if (params) {
     rb.query('createdAt', params.createdAt, {"explode":false});
@@ -259,7 +260,7 @@ export function managersControllerFindAll(http: HttpClient, rootUrl: string, par
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<any>>;
+      return r as StrictHttpResponse<FindAllManagersDto>;
     })
   );
 }

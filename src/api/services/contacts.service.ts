@@ -23,7 +23,7 @@ import { ContactsControllerRemove$Params } from '../fn/contacts/contacts-control
 import { contactsControllerUpdate } from '../fn/contacts/contacts-controller-update';
 import { ContactsControllerUpdate$Params } from '../fn/contacts/contacts-controller-update';
 import { DeleteResultDto } from '../models/delete-result-dto';
-import { UpdateResultDto } from '../models/update-result-dto';
+import { FindAllContactsDto } from '../models/find-all-contacts-dto';
 
 
 /**
@@ -44,7 +44,7 @@ export class ContactsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactsControllerFindAll$Response(params?: ContactsControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+  contactsControllerFindAll$Response(params?: ContactsControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactsDto>> {
     return contactsControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +54,9 @@ export class ContactsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactsControllerFindAll(params?: ContactsControllerFindAll$Params, context?: HttpContext): Observable<Array<any>> {
+  contactsControllerFindAll(params?: ContactsControllerFindAll$Params, context?: HttpContext): Observable<FindAllContactsDto> {
     return this.contactsControllerFindAll$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<any>>): Array<any> => r.body)
+      map((r: StrictHttpResponse<FindAllContactsDto>): FindAllContactsDto => r.body)
     );
   }
 
@@ -144,7 +144,7 @@ export class ContactsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactsControllerUpdate$Response(params: ContactsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+  contactsControllerUpdate$Response(params: ContactsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<Contact>> {
     return contactsControllerUpdate(this.http, this.rootUrl, params, context);
   }
 
@@ -154,9 +154,9 @@ export class ContactsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactsControllerUpdate(params: ContactsControllerUpdate$Params, context?: HttpContext): Observable<UpdateResultDto> {
+  contactsControllerUpdate(params: ContactsControllerUpdate$Params, context?: HttpContext): Observable<Contact> {
     return this.contactsControllerUpdate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UpdateResultDto>): UpdateResultDto => r.body)
+      map((r: StrictHttpResponse<Contact>): Contact => r.body)
     );
   }
 

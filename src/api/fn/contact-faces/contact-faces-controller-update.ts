@@ -8,8 +8,8 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { ContactFace } from '../../models/contact-face';
 import { UpdateContactFaceDto } from '../../models/update-contact-face-dto';
-import { UpdateResultDto } from '../../models/update-result-dto';
 
 export interface ContactFacesControllerUpdate$Params {
 
@@ -20,7 +20,7 @@ export interface ContactFacesControllerUpdate$Params {
       body: UpdateContactFaceDto
 }
 
-export function contactFacesControllerUpdate(http: HttpClient, rootUrl: string, params: ContactFacesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+export function contactFacesControllerUpdate(http: HttpClient, rootUrl: string, params: ContactFacesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<ContactFace>> {
   const rb = new RequestBuilder(rootUrl, contactFacesControllerUpdate.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -32,7 +32,7 @@ export function contactFacesControllerUpdate(http: HttpClient, rootUrl: string, 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UpdateResultDto>;
+      return r as StrictHttpResponse<ContactFace>;
     })
   );
 }

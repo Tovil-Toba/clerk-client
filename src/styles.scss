@@ -14,3 +14,18 @@
   @tailwind components;
   @tailwind utilities;
 }
+
+@import "primeicons/primeicons.css";
+
+.card {
+  background: var(--p-menubar-background);
+  border-color: var(--p-menubar-border-color);
+  border-radius: var(--p-menubar-border-radius);
+  border-width: 1px;
+  padding: 2rem;
+}
+
+.paginator-dropdown-top .p-paginator .p-select-overlay {
+  top: unset;
+  bottom: 100%;
+}

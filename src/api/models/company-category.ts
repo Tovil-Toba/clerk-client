@@ -5,6 +5,11 @@
 export interface CompanyCategory {
 
   /**
+   * Дата создания
+   */
+  createdAt: string;
+
+  /**
    * Идентификатор
    */
   id: number;
@@ -18,4 +23,9 @@ export interface CompanyCategory {
    * Название категории
    */
   name: string;
+
+  /**
+   * Дата изменения
+   */
+  updatedAt: string;
 }

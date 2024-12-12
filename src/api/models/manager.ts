@@ -6,6 +6,11 @@ import { Name } from '../models/name';
 export interface Manager {
 
   /**
+   * Дата создания
+   */
+  createdAt: string;
+
+  /**
    * Адрес электронной почты
    */
   email?: string;
@@ -29,4 +34,9 @@ export interface Manager {
    * Телефон
    */
   phone?: string;
+
+  /**
+   * Дата изменения
+   */
+  updatedAt: string;
 }

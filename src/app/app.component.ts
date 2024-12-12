@@ -1,20 +1,40 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PrimeNGConfig } from 'primeng/api';
+import {
+  ConfirmationService,
+  MessageService,
+  PrimeNGConfig,
+} from 'primeng/api';
+import { CardModule } from 'primeng/card';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PanelModule } from 'primeng/panel';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { Aura } from 'primeng/themes/aura';
+import { ToastModule } from 'primeng/toast';
 
 import { ApiService } from '../api/api.service';
 import { ApiConfiguration } from '../api/api-configuration';
 import { CompaniesComponent } from './companies/companies.component';
 import { DarkModeService } from './core/dark-mode.service';
+import { TRANSLATION } from './core/translation';
 import { HeaderComponent } from './header/header.component';
 import { DARK_MODE_CLASS_NAME } from './shared/dark-mode-class-name';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CompaniesComponent, HeaderComponent, RouterOutlet],
-  providers: [ApiService],
+  imports: [
+    CardModule,
+    CompaniesComponent,
+    ConfirmDialogModule,
+    HeaderComponent,
+    PanelModule,
+    RouterOutlet,
+    ScrollPanelModule,
+    ToastModule,
+  ],
+  providers: [ApiService, ConfirmationService, DialogService, MessageService],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,6 +58,8 @@ export class AppComponent {
     });
 
     this._primengConfig.ripple.set(true);
+
+    this._primengConfig.setTranslation(TRANSLATION);
 
     this._darkModeService.init();
   }

@@ -1,14 +1,213 @@
-@let companies = companies$ | async;
+@let addedItemIdsValue = addedItemIds();
+@let findAllResultValue = findAllResult();
 
-<pre>
-  {{ companies | json }}
-</pre>
+<div class="h-full">
+  <p-table
+    alwaysShowPaginator="true"
+    lazy
+    [loading]="isLoading()"
+    paginator
+    paginatorDropdownAppendTo="table"
+    paginatorStyleClass="dropdown-top"
+    resizableColumns
+    [rows]="rowsPerPage()"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    scrollable
+    scrollHeight="flex"
+    showGridlines
+    size="small"
+    styleClass="paginator-dropdown-top"
+    [totalRecords]="findAllResultValue?.count ?? 0"
+    [value]="findAllResultValue?.items ?? []"
+    (onFilter)="onFilter($event)"
+    (onPage)="onPageChange($event)"
+    (onSort)="onSort($event)"
+  >
+    <ng-template pTemplate="caption">
+      <app-table-header name="Компании" (add)="add('Добавление компании')" />
+    </ng-template>
 
-<h3 class="my-2 text-xl font-medium">Названия компаний</h3>
-@if (companies) {
-  @for (company of companies; track company.id) {
-    <li>{{ company.name }}</li>
-  } @empty {
-    <li>There are no items.</li>
-  }
-}
+    <ng-template pTemplate="header">
+      <tr [style.height.px]="46">
+        <!--<th class="text-nowrap" pResizableColumn pSortableColumn="id">
+          Id
+          <p-sortIcon field="id" />
+        </th>-->
+        <th class="text-nowrap" pResizableColumn pSortableColumn="name">
+          Название
+          <p-sortIcon field="name" />
+        </th>
+        <th
+          class="text-nowrap"
+          pResizableColumn
+          pSortableColumn="fieldOfActivity"
+        >
+          Сфера деятельности
+          <p-sortIcon field="fieldOfActivity" />
+        </th>
+        <th class="text-nowrap" pResizableColumn pSortableColumn="notes">
+          Примечания
+          <p-sortIcon field="notes" />
+        </th>
+        <th
+          class="text-nowrap"
+          pResizableColumn
+          pSortableColumn="category.name"
+        >
+          Категория
+          <p-sortIcon field="category.name" />
+        </th>
+        <th class="text-nowrap" pResizableColumn pSortableColumn="phones">
+          Телефоны
+          <p-sortIcon field="phones" />
+        </th>
+        <th class="text-nowrap" pResizableColumn pSortableColumn="emails">
+          Адреса электронных почт
+          <p-sortIcon field="emails" />
+        </th>
+        <th class="text-nowrap" pResizableColumn pSortableColumn="urls">
+          Ссылки
+          <p-sortIcon field="urls" />
+        </th>
+        <th
+          class="text-nowrap"
+          pResizableColumn
+          pSortableColumn="manager.name.last"
+        >
+          Менеджер
+          <p-sortIcon field="manager.name.last" />
+        </th>
+        <th class="text-nowrap" pResizableColumn pSortableColumn="createdAt">
+          Дата создания
+          <p-sortIcon field="createdAt" />
+        </th>
+        <th class="text-nowrap" pResizableColumn pSortableColumn="updatedAt">
+          Дата изменения
+          <p-sortIcon field="updatedAt" />
+        </th>
+        <th>Действия</th>
+      </tr>
+      <tr>
+        <!--<th pResizableColumn>
+          <p-columnFilter type="numeric" field="id" />
+        </th>-->
+        <th pResizableColumn>
+          <p-columnFilter type="text" field="name" />
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter type="text" field="fieldOfActivity" />
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter type="text" field="notes" />
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter
+            field="categoryId"
+            matchMode="equals"
+            [showMenu]="false"
+          >
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-select
+                appendTo="body"
+                dataKey="id"
+                [loading]="isCompanyCategoryNamesLoading()"
+                [(ngModel)]="value!"
+                [options]="(companyCategoryNames$ | async) ?? []"
+                optionLabel="name"
+                (onChange)="filter($event.value)"
+              />
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter type="text" field="phones" />
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter type="text" field="emails" />
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter type="text" field="urls" />
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter
+            field="managerId"
+            matchMode="equals"
+            [showMenu]="false"
+          >
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-select
+                appendTo="body"
+                dataKey="id"
+                [loading]="isManagerNamesLoading()"
+                [(ngModel)]="value!"
+                [options]="(managerNames$ | async) ?? []"
+                optionLabel="name.last"
+                (onChange)="filter($event.value)"
+              >
+                <ng-template pTemplate="selectedItem">
+                  @if (value?.name) {
+                    <div class="flex items-center gap-2">
+                      <span>
+                        {{ value.name | userNameShort }}
+                      </span>
+                    </div>
+                  }
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block align-middle">
+                    <span class="ml-1 mt-1">
+                      {{ option.name | userNameShort }}
+                    </span>
+                  </div>
+                </ng-template>
+              </p-select>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter type="date" field="createdAt" />
+        </th>
+        <th pResizableColumn>
+          <p-columnFilter type="date" field="updatedAt" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-company>
+      @let isAddedItem = addedItemIdsValue.includes(company.id);
+
+      <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
+        <!--<td>{{ company.id }}</td>-->
+        <td>{{ company.name }}</td>
+        <td>{{ company.fieldOfActivity }}</td>
+        <td>{{ company.notes }}</td>
+        <td>{{ company.category?.name }}</td>
+        <td>{{ company.phones }}</td>
+        <td>{{ company.emails }}</td>
+        <td>{{ company.urls }}</td>
+        <td class="text-nowrap">
+          @if (company.manager) {
+            {{ company.manager.name | userNameShort }}
+          }
+        </td>
+        <td>{{ company.createdAt | date: "dd.MM.yyyy" }}</td>
+        <td>{{ company.updatedAt | date: "dd.MM.yyyy" }}</td>
+        <td>
+          <app-table-actions
+            (delete)="delete(company, 'Удаление компании')"
+            (edit)="edit(company, 'Редактирование компании')"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

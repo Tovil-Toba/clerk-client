@@ -15,6 +15,8 @@ import { companyCategoriesControllerCreate } from '../fn/company-categories/comp
 import { CompanyCategoriesControllerCreate$Params } from '../fn/company-categories/company-categories-controller-create';
 import { companyCategoriesControllerFindAll } from '../fn/company-categories/company-categories-controller-find-all';
 import { CompanyCategoriesControllerFindAll$Params } from '../fn/company-categories/company-categories-controller-find-all';
+import { companyCategoriesControllerFindNames } from '../fn/company-categories/company-categories-controller-find-names';
+import { CompanyCategoriesControllerFindNames$Params } from '../fn/company-categories/company-categories-controller-find-names';
 import { companyCategoriesControllerFindOne } from '../fn/company-categories/company-categories-controller-find-one';
 import { CompanyCategoriesControllerFindOne$Params } from '../fn/company-categories/company-categories-controller-find-one';
 import { companyCategoriesControllerRemove } from '../fn/company-categories/company-categories-controller-remove';
@@ -23,7 +25,8 @@ import { companyCategoriesControllerUpdate } from '../fn/company-categories/comp
 import { CompanyCategoriesControllerUpdate$Params } from '../fn/company-categories/company-categories-controller-update';
 import { CompanyCategory } from '../models/company-category';
 import { DeleteResultDto } from '../models/delete-result-dto';
-import { UpdateResultDto } from '../models/update-result-dto';
+import { FindAllCompanyCategoriesDto } from '../models/find-all-company-categories-dto';
+import { FindNamesResultDto } from '../models/find-names-result-dto';
 
 
 /**
@@ -44,7 +47,7 @@ export class CompanyCategoriesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  companyCategoriesControllerFindAll$Response(params?: CompanyCategoriesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+  companyCategoriesControllerFindAll$Response(params?: CompanyCategoriesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllCompanyCategoriesDto>> {
     return companyCategoriesControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +57,9 @@ export class CompanyCategoriesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  companyCategoriesControllerFindAll(params?: CompanyCategoriesControllerFindAll$Params, context?: HttpContext): Observable<Array<any>> {
+  companyCategoriesControllerFindAll(params?: CompanyCategoriesControllerFindAll$Params, context?: HttpContext): Observable<FindAllCompanyCategoriesDto> {
     return this.companyCategoriesControllerFindAll$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<any>>): Array<any> => r.body)
+      map((r: StrictHttpResponse<FindAllCompanyCategoriesDto>): FindAllCompanyCategoriesDto => r.body)
     );
   }
 
@@ -82,6 +85,31 @@ export class CompanyCategoriesService extends BaseService {
   companyCategoriesControllerCreate(params: CompanyCategoriesControllerCreate$Params, context?: HttpContext): Observable<CompanyCategory> {
     return this.companyCategoriesControllerCreate$Response(params, context).pipe(
       map((r: StrictHttpResponse<CompanyCategory>): CompanyCategory => r.body)
+    );
+  }
+
+  /** Path part for operation `companyCategoriesControllerFindNames()` */
+  static readonly CompanyCategoriesControllerFindNamesPath = '/company-categories/names';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `companyCategoriesControllerFindNames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  companyCategoriesControllerFindNames$Response(params?: CompanyCategoriesControllerFindNames$Params, context?: HttpContext): Observable<StrictHttpResponse<FindNamesResultDto>> {
+    return companyCategoriesControllerFindNames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `companyCategoriesControllerFindNames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  companyCategoriesControllerFindNames(params?: CompanyCategoriesControllerFindNames$Params, context?: HttpContext): Observable<FindNamesResultDto> {
+    return this.companyCategoriesControllerFindNames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FindNamesResultDto>): FindNamesResultDto => r.body)
     );
   }
 
@@ -144,7 +172,7 @@ export class CompanyCategoriesService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  companyCategoriesControllerUpdate$Response(params: CompanyCategoriesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+  companyCategoriesControllerUpdate$Response(params: CompanyCategoriesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<CompanyCategory>> {
     return companyCategoriesControllerUpdate(this.http, this.rootUrl, params, context);
   }
 
@@ -154,9 +182,9 @@ export class CompanyCategoriesService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  companyCategoriesControllerUpdate(params: CompanyCategoriesControllerUpdate$Params, context?: HttpContext): Observable<UpdateResultDto> {
+  companyCategoriesControllerUpdate(params: CompanyCategoriesControllerUpdate$Params, context?: HttpContext): Observable<CompanyCategory> {
     return this.companyCategoriesControllerUpdate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UpdateResultDto>): UpdateResultDto => r.body)
+      map((r: StrictHttpResponse<CompanyCategory>): CompanyCategory => r.body)
     );
   }
 

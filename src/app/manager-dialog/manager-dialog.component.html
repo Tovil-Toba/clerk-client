@@ -1,0 +1,40 @@
+<form id="dialog-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="flex flex-col gap-2">
+    <ng-container formGroupName="name">
+      <div class="flex flex-col gap-2">
+        <label for="name.last"
+          >Фамилия <span class="text-red-600">*</span></label
+        >
+        <input pInputText id="name.last" formControlName="last" required />
+        @if (lastName?.invalid && (lastName?.dirty || !lastName?.untouched)) {
+          <small class="text-red-600">Введите фамилию.</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="name.first">Имя <span class="text-red-600">*</span></label>
+        <input pInputText id="name.first" formControlName="first" />
+        @if (
+          firstName?.invalid && (firstName?.dirty || !firstName?.untouched)
+        ) {
+          <small class="text-red-600">Введите имя.</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="name.middle">Отчество</label>
+        <input pInputText id="name.middle" formControlName="middle" />
+      </div>
+    </ng-container>
+
+    <div class="flex flex-col gap-2">
+      <label for="phone">Телефон</label>
+      <input pInputText id="phone" formControlName="phone" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="email">Адрес электронной почты</label>
+      <input pInputText id="email" formControlName="email" />
+    </div>
+  </div>
+</form>

@@ -1,0 +1,11 @@
+<form id="dialog-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
+      <label for="name">Название <span class="text-red-600">*</span></label>
+      <input pInputText id="name" formControlName="name" required />
+      @if (name?.invalid && (name?.dirty || !name?.untouched)) {
+        <small class="text-red-600">Введите название.</small>
+      }
+    </div>
+  </div>
+</form>

@@ -8,14 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ContactFace } from '../../models/contact-face';
 import { CreateManagerDto } from '../../models/create-manager-dto';
+import { Manager } from '../../models/manager';
 
 export interface ManagersControllerCreate$Params {
       body: CreateManagerDto
 }
 
-export function managersControllerCreate(http: HttpClient, rootUrl: string, params: ManagersControllerCreate$Params, context?: HttpContext): Observable<StrictHttpResponse<ContactFace>> {
+export function managersControllerCreate(http: HttpClient, rootUrl: string, params: ManagersControllerCreate$Params, context?: HttpContext): Observable<StrictHttpResponse<Manager>> {
   const rb = new RequestBuilder(rootUrl, managersControllerCreate.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
@@ -26,7 +26,7 @@ export function managersControllerCreate(http: HttpClient, rootUrl: string, para
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ContactFace>;
+      return r as StrictHttpResponse<Manager>;
     })
   );
 }

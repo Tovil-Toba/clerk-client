@@ -11,20 +11,22 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ContactFace } from '../models/contact-face';
 import { DeleteResultDto } from '../models/delete-result-dto';
+import { FindAllManagersDto } from '../models/find-all-managers-dto';
+import { FindUserNamesResultDto } from '../models/find-user-names-result-dto';
 import { Manager } from '../models/manager';
 import { managersControllerCreate } from '../fn/managers/managers-controller-create';
 import { ManagersControllerCreate$Params } from '../fn/managers/managers-controller-create';
 import { managersControllerFindAll } from '../fn/managers/managers-controller-find-all';
 import { ManagersControllerFindAll$Params } from '../fn/managers/managers-controller-find-all';
+import { managersControllerFindNames } from '../fn/managers/managers-controller-find-names';
+import { ManagersControllerFindNames$Params } from '../fn/managers/managers-controller-find-names';
 import { managersControllerFindOne } from '../fn/managers/managers-controller-find-one';
 import { ManagersControllerFindOne$Params } from '../fn/managers/managers-controller-find-one';
 import { managersControllerRemove } from '../fn/managers/managers-controller-remove';
 import { ManagersControllerRemove$Params } from '../fn/managers/managers-controller-remove';
 import { managersControllerUpdate } from '../fn/managers/managers-controller-update';
 import { ManagersControllerUpdate$Params } from '../fn/managers/managers-controller-update';
-import { UpdateResultDto } from '../models/update-result-dto';
 
 
 /**
@@ -45,7 +47,7 @@ export class ManagersService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  managersControllerFindAll$Response(params?: ManagersControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+  managersControllerFindAll$Response(params?: ManagersControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllManagersDto>> {
     return managersControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -55,9 +57,9 @@ export class ManagersService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  managersControllerFindAll(params?: ManagersControllerFindAll$Params, context?: HttpContext): Observable<Array<any>> {
+  managersControllerFindAll(params?: ManagersControllerFindAll$Params, context?: HttpContext): Observable<FindAllManagersDto> {
     return this.managersControllerFindAll$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<any>>): Array<any> => r.body)
+      map((r: StrictHttpResponse<FindAllManagersDto>): FindAllManagersDto => r.body)
     );
   }
 
@@ -70,7 +72,7 @@ export class ManagersService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  managersControllerCreate$Response(params: ManagersControllerCreate$Params, context?: HttpContext): Observable<StrictHttpResponse<ContactFace>> {
+  managersControllerCreate$Response(params: ManagersControllerCreate$Params, context?: HttpContext): Observable<StrictHttpResponse<Manager>> {
     return managersControllerCreate(this.http, this.rootUrl, params, context);
   }
 
@@ -80,9 +82,34 @@ export class ManagersService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  managersControllerCreate(params: ManagersControllerCreate$Params, context?: HttpContext): Observable<ContactFace> {
+  managersControllerCreate(params: ManagersControllerCreate$Params, context?: HttpContext): Observable<Manager> {
     return this.managersControllerCreate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ContactFace>): ContactFace => r.body)
+      map((r: StrictHttpResponse<Manager>): Manager => r.body)
+    );
+  }
+
+  /** Path part for operation `managersControllerFindNames()` */
+  static readonly ManagersControllerFindNamesPath = '/managers/names';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `managersControllerFindNames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  managersControllerFindNames$Response(params?: ManagersControllerFindNames$Params, context?: HttpContext): Observable<StrictHttpResponse<FindUserNamesResultDto>> {
+    return managersControllerFindNames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `managersControllerFindNames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  managersControllerFindNames(params?: ManagersControllerFindNames$Params, context?: HttpContext): Observable<FindUserNamesResultDto> {
+    return this.managersControllerFindNames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FindUserNamesResultDto>): FindUserNamesResultDto => r.body)
     );
   }
 
@@ -145,7 +172,7 @@ export class ManagersService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  managersControllerUpdate$Response(params: ManagersControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+  managersControllerUpdate$Response(params: ManagersControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<Manager>> {
     return managersControllerUpdate(this.http, this.rootUrl, params, context);
   }
 
@@ -155,9 +182,9 @@ export class ManagersService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  managersControllerUpdate(params: ManagersControllerUpdate$Params, context?: HttpContext): Observable<UpdateResultDto> {
+  managersControllerUpdate(params: ManagersControllerUpdate$Params, context?: HttpContext): Observable<Manager> {
     return this.managersControllerUpdate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UpdateResultDto>): UpdateResultDto => r.body)
+      map((r: StrictHttpResponse<Manager>): Manager => r.body)
     );
   }
 

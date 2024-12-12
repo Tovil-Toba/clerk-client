@@ -8,8 +8,8 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { ContactFacePosition } from '../../models/contact-face-position';
 import { UpdateContactFacePositionDto } from '../../models/update-contact-face-position-dto';
-import { UpdateResultDto } from '../../models/update-result-dto';
 
 export interface ContactFacePositionsControllerUpdate$Params {
 
@@ -20,7 +20,7 @@ export interface ContactFacePositionsControllerUpdate$Params {
       body: UpdateContactFacePositionDto
 }
 
-export function contactFacePositionsControllerUpdate(http: HttpClient, rootUrl: string, params: ContactFacePositionsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+export function contactFacePositionsControllerUpdate(http: HttpClient, rootUrl: string, params: ContactFacePositionsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<ContactFacePosition>> {
   const rb = new RequestBuilder(rootUrl, contactFacePositionsControllerUpdate.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -32,7 +32,7 @@ export function contactFacePositionsControllerUpdate(http: HttpClient, rootUrl: 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UpdateResultDto>;
+      return r as StrictHttpResponse<ContactFacePosition>;
     })
   );
 }

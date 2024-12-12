@@ -16,6 +16,8 @@ import { contactFacePositionsControllerCreate } from '../fn/contact-face-positio
 import { ContactFacePositionsControllerCreate$Params } from '../fn/contact-face-positions/contact-face-positions-controller-create';
 import { contactFacePositionsControllerFindAll } from '../fn/contact-face-positions/contact-face-positions-controller-find-all';
 import { ContactFacePositionsControllerFindAll$Params } from '../fn/contact-face-positions/contact-face-positions-controller-find-all';
+import { contactFacePositionsControllerFindNames } from '../fn/contact-face-positions/contact-face-positions-controller-find-names';
+import { ContactFacePositionsControllerFindNames$Params } from '../fn/contact-face-positions/contact-face-positions-controller-find-names';
 import { contactFacePositionsControllerFindOne } from '../fn/contact-face-positions/contact-face-positions-controller-find-one';
 import { ContactFacePositionsControllerFindOne$Params } from '../fn/contact-face-positions/contact-face-positions-controller-find-one';
 import { contactFacePositionsControllerRemove } from '../fn/contact-face-positions/contact-face-positions-controller-remove';
@@ -23,7 +25,8 @@ import { ContactFacePositionsControllerRemove$Params } from '../fn/contact-face-
 import { contactFacePositionsControllerUpdate } from '../fn/contact-face-positions/contact-face-positions-controller-update';
 import { ContactFacePositionsControllerUpdate$Params } from '../fn/contact-face-positions/contact-face-positions-controller-update';
 import { DeleteResultDto } from '../models/delete-result-dto';
-import { UpdateResultDto } from '../models/update-result-dto';
+import { FindAllContactFacePositionsDto } from '../models/find-all-contact-face-positions-dto';
+import { FindNamesResultDto } from '../models/find-names-result-dto';
 
 
 /**
@@ -44,7 +47,7 @@ export class ContactFacePositionsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactFacePositionsControllerFindAll$Response(params?: ContactFacePositionsControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+  contactFacePositionsControllerFindAll$Response(params?: ContactFacePositionsControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactFacePositionsDto>> {
     return contactFacePositionsControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +57,9 @@ export class ContactFacePositionsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactFacePositionsControllerFindAll(params?: ContactFacePositionsControllerFindAll$Params, context?: HttpContext): Observable<Array<any>> {
+  contactFacePositionsControllerFindAll(params?: ContactFacePositionsControllerFindAll$Params, context?: HttpContext): Observable<FindAllContactFacePositionsDto> {
     return this.contactFacePositionsControllerFindAll$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<any>>): Array<any> => r.body)
+      map((r: StrictHttpResponse<FindAllContactFacePositionsDto>): FindAllContactFacePositionsDto => r.body)
     );
   }
 
@@ -82,6 +85,31 @@ export class ContactFacePositionsService extends BaseService {
   contactFacePositionsControllerCreate(params: ContactFacePositionsControllerCreate$Params, context?: HttpContext): Observable<ContactFacePosition> {
     return this.contactFacePositionsControllerCreate$Response(params, context).pipe(
       map((r: StrictHttpResponse<ContactFacePosition>): ContactFacePosition => r.body)
+    );
+  }
+
+  /** Path part for operation `contactFacePositionsControllerFindNames()` */
+  static readonly ContactFacePositionsControllerFindNamesPath = '/contact-face-positions/names';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `contactFacePositionsControllerFindNames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  contactFacePositionsControllerFindNames$Response(params?: ContactFacePositionsControllerFindNames$Params, context?: HttpContext): Observable<StrictHttpResponse<FindNamesResultDto>> {
+    return contactFacePositionsControllerFindNames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `contactFacePositionsControllerFindNames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  contactFacePositionsControllerFindNames(params?: ContactFacePositionsControllerFindNames$Params, context?: HttpContext): Observable<FindNamesResultDto> {
+    return this.contactFacePositionsControllerFindNames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FindNamesResultDto>): FindNamesResultDto => r.body)
     );
   }
 
@@ -144,7 +172,7 @@ export class ContactFacePositionsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactFacePositionsControllerUpdate$Response(params: ContactFacePositionsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+  contactFacePositionsControllerUpdate$Response(params: ContactFacePositionsControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<ContactFacePosition>> {
     return contactFacePositionsControllerUpdate(this.http, this.rootUrl, params, context);
   }
 
@@ -154,9 +182,9 @@ export class ContactFacePositionsService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactFacePositionsControllerUpdate(params: ContactFacePositionsControllerUpdate$Params, context?: HttpContext): Observable<UpdateResultDto> {
+  contactFacePositionsControllerUpdate(params: ContactFacePositionsControllerUpdate$Params, context?: HttpContext): Observable<ContactFacePosition> {
     return this.contactFacePositionsControllerUpdate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UpdateResultDto>): UpdateResultDto => r.body)
+      map((r: StrictHttpResponse<ContactFacePosition>): ContactFacePosition => r.body)
     );
   }
 

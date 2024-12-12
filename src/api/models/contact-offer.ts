@@ -5,6 +5,11 @@
 export interface ContactOffer {
 
   /**
+   * Дата создания
+   */
+  createdAt: string;
+
+  /**
    * Идентификатор
    */
   id: number;
@@ -18,4 +23,9 @@ export interface ContactOffer {
    * Название предложения
    */
   name: string;
+
+  /**
+   * Дата изменения
+   */
+  updatedAt: string;
 }

@@ -11,6 +11,7 @@ import { RequestBuilder } from '../../request-builder';
 import { BooleanFilterEnum } from '../../models/boolean-filter-enum';
 import { ContactStatusEnum } from '../../models/contact-status-enum';
 import { DateFilterEnum } from '../../models/date-filter-enum';
+import { FindAllContactsDto } from '../../models/find-all-contacts-dto';
 import { NumberFilterEnum } from '../../models/number-filter-enum';
 import { OrderEnum } from '../../models/order-enum';
 import { StringFilterEnum } from '../../models/string-filter-enum';
@@ -428,7 +429,7 @@ export interface ContactsControllerFindAll$Params {
   limit?: number;
 }
 
-export function contactsControllerFindAll(http: HttpClient, rootUrl: string, params?: ContactsControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+export function contactsControllerFindAll(http: HttpClient, rootUrl: string, params?: ContactsControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactsDto>> {
   const rb = new RequestBuilder(rootUrl, contactsControllerFindAll.PATH, 'get');
   if (params) {
     rb.query('company.name', params['company.name'], {"explode":false});
@@ -516,7 +517,7 @@ export function contactsControllerFindAll(http: HttpClient, rootUrl: string, par
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<any>>;
+      return r as StrictHttpResponse<FindAllContactsDto>;
     })
   );
 }

@@ -12,6 +12,11 @@ export interface ContactFace {
   companyId: number;
 
   /**
+   * Дата создания
+   */
+  createdAt: string;
+
+  /**
    * Адрес электронной почты
    */
   email?: string;
@@ -50,4 +55,9 @@ export interface ContactFace {
    * Идентификатор должности
    */
   positionId?: number | null;
+
+  /**
+   * Дата изменения
+   */
+  updatedAt: string;
 }

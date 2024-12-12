@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 
 import { DarkModeService } from '../core/dark-mode.service';
+import { HEADER_MENU_ITEMS } from './header-menu-items';
 
 @Component({
   selector: 'app-header',
@@ -20,15 +21,9 @@ import { DarkModeService } from '../core/dark-mode.service';
 export class HeaderComponent {
   private readonly _darkModeService = inject(DarkModeService);
 
-  readonly isDarkMode: Signal<boolean> = this._darkModeService.isDarkMode;
+  protected isDarkMode: Signal<boolean> = this._darkModeService.isDarkMode;
 
-  readonly menuItems: MenuItem[] = [
-    {
-      label: 'Компании',
-      icon: 'fa-solid fa-building',
-      routerLink: ['/companies'],
-    },
-  ];
+  protected readonly menuItems: MenuItem[] = HEADER_MENU_ITEMS;
 
   toggleDarkMode(): void {
     this._darkModeService.toggleDarkMode();

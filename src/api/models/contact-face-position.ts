@@ -5,6 +5,11 @@
 export interface ContactFacePosition {
 
   /**
+   * Дата создания
+   */
+  createdAt: string;
+
+  /**
    * Идентификатор
    */
   id: number;
@@ -18,4 +23,9 @@ export interface ContactFacePosition {
    * Название должности
    */
   name: string;
+
+  /**
+   * Дата изменения
+   */
+  updatedAt: string;
 }

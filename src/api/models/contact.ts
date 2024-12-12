@@ -34,6 +34,11 @@ export interface Contact {
   contactFaceId?: number | null;
 
   /**
+   * Дата создания
+   */
+  createdAt: string;
+
+  /**
    * Описание
    */
   description?: string;
@@ -87,4 +92,9 @@ export interface Contact {
    * Состояние
    */
   status: 'CANCELED' | 'COMPLETED' | 'PLANNING';
+
+  /**
+   * Дата изменения
+   */
+  updatedAt: string;
 }

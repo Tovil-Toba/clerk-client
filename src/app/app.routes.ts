@@ -16,6 +16,18 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'company-categories',
+    loadComponent: () =>
+      import('./company-categories/company-categories.component').then(
+        (m) => m.CompanyCategoriesComponent,
+      ),
+  },
+  {
+    path: 'managers',
+    loadComponent: () =>
+      import('./managers/managers.component').then((m) => m.ManagersComponent),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./page-not-found/page-not-found.component').then(

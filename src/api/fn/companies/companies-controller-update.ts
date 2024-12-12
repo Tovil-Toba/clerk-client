@@ -8,8 +8,8 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { Company } from '../../models/company';
 import { UpdateCompanyDto } from '../../models/update-company-dto';
-import { UpdateResultDto } from '../../models/update-result-dto';
 
 export interface CompaniesControllerUpdate$Params {
 
@@ -20,7 +20,7 @@ export interface CompaniesControllerUpdate$Params {
       body: UpdateCompanyDto
 }
 
-export function companiesControllerUpdate(http: HttpClient, rootUrl: string, params: CompaniesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+export function companiesControllerUpdate(http: HttpClient, rootUrl: string, params: CompaniesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<Company>> {
   const rb = new RequestBuilder(rootUrl, companiesControllerUpdate.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -32,7 +32,7 @@ export function companiesControllerUpdate(http: HttpClient, rootUrl: string, par
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UpdateResultDto>;
+      return r as StrictHttpResponse<Company>;
     })
   );
 }

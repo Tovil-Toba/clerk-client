@@ -16,6 +16,8 @@ import { contactFacesControllerCreate } from '../fn/contact-faces/contact-faces-
 import { ContactFacesControllerCreate$Params } from '../fn/contact-faces/contact-faces-controller-create';
 import { contactFacesControllerFindAll } from '../fn/contact-faces/contact-faces-controller-find-all';
 import { ContactFacesControllerFindAll$Params } from '../fn/contact-faces/contact-faces-controller-find-all';
+import { contactFacesControllerFindNames } from '../fn/contact-faces/contact-faces-controller-find-names';
+import { ContactFacesControllerFindNames$Params } from '../fn/contact-faces/contact-faces-controller-find-names';
 import { contactFacesControllerFindOne } from '../fn/contact-faces/contact-faces-controller-find-one';
 import { ContactFacesControllerFindOne$Params } from '../fn/contact-faces/contact-faces-controller-find-one';
 import { contactFacesControllerRemove } from '../fn/contact-faces/contact-faces-controller-remove';
@@ -23,7 +25,8 @@ import { ContactFacesControllerRemove$Params } from '../fn/contact-faces/contact
 import { contactFacesControllerUpdate } from '../fn/contact-faces/contact-faces-controller-update';
 import { ContactFacesControllerUpdate$Params } from '../fn/contact-faces/contact-faces-controller-update';
 import { DeleteResultDto } from '../models/delete-result-dto';
-import { UpdateResultDto } from '../models/update-result-dto';
+import { FindAllContactFacesDto } from '../models/find-all-contact-faces-dto';
+import { FindUserNamesResultDto } from '../models/find-user-names-result-dto';
 
 
 /**
@@ -44,7 +47,7 @@ export class ContactFacesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactFacesControllerFindAll$Response(params: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<any>>> {
+  contactFacesControllerFindAll$Response(params: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactFacesDto>> {
     return contactFacesControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +57,9 @@ export class ContactFacesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactFacesControllerFindAll(params: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<Array<any>> {
+  contactFacesControllerFindAll(params: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<FindAllContactFacesDto> {
     return this.contactFacesControllerFindAll$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<any>>): Array<any> => r.body)
+      map((r: StrictHttpResponse<FindAllContactFacesDto>): FindAllContactFacesDto => r.body)
     );
   }
 
@@ -82,6 +85,31 @@ export class ContactFacesService extends BaseService {
   contactFacesControllerCreate(params: ContactFacesControllerCreate$Params, context?: HttpContext): Observable<ContactFace> {
     return this.contactFacesControllerCreate$Response(params, context).pipe(
       map((r: StrictHttpResponse<ContactFace>): ContactFace => r.body)
+    );
+  }
+
+  /** Path part for operation `contactFacesControllerFindNames()` */
+  static readonly ContactFacesControllerFindNamesPath = '/contact-faces/names';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `contactFacesControllerFindNames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  contactFacesControllerFindNames$Response(params?: ContactFacesControllerFindNames$Params, context?: HttpContext): Observable<StrictHttpResponse<FindUserNamesResultDto>> {
+    return contactFacesControllerFindNames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `contactFacesControllerFindNames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  contactFacesControllerFindNames(params?: ContactFacesControllerFindNames$Params, context?: HttpContext): Observable<FindUserNamesResultDto> {
+    return this.contactFacesControllerFindNames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<FindUserNamesResultDto>): FindUserNamesResultDto => r.body)
     );
   }
 
@@ -144,7 +172,7 @@ export class ContactFacesService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactFacesControllerUpdate$Response(params: ContactFacesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateResultDto>> {
+  contactFacesControllerUpdate$Response(params: ContactFacesControllerUpdate$Params, context?: HttpContext): Observable<StrictHttpResponse<ContactFace>> {
     return contactFacesControllerUpdate(this.http, this.rootUrl, params, context);
   }
 
@@ -154,9 +182,9 @@ export class ContactFacesService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  contactFacesControllerUpdate(params: ContactFacesControllerUpdate$Params, context?: HttpContext): Observable<UpdateResultDto> {
+  contactFacesControllerUpdate(params: ContactFacesControllerUpdate$Params, context?: HttpContext): Observable<ContactFace> {
     return this.contactFacesControllerUpdate$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UpdateResultDto>): UpdateResultDto => r.body)
+      map((r: StrictHttpResponse<ContactFace>): ContactFace => r.body)
     );
   }
 
