@@ -4,6 +4,7 @@ import {
   inject,
   Signal,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
@@ -14,7 +15,7 @@ import { HEADER_MENU_ITEMS } from './header-menu-items';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [ButtonModule, MenubarModule],
+  imports: [ButtonModule, MenubarModule, RouterLink],
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

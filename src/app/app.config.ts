@@ -7,14 +7,17 @@ import {
   withLocalStorage,
   withSessionStorage,
 } from 'ngx-webstorage';
+import { providePrimeNG } from 'primeng/config';
 
 import { routes } from './app.routes';
+import { PRIME_NG_CONFIG } from './core/prime-ng-config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
     provideHttpClient(withFetch()),
     provideNgxWebstorage(withLocalStorage(), withSessionStorage()),
+    providePrimeNG(PRIME_NG_CONFIG),
     provideRouter(routes),
     provideZoneChangeDetection({ eventCoalescing: true }),
   ],
