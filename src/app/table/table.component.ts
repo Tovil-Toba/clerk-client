@@ -3,13 +3,13 @@ import {
   Component,
   inject,
   OnInit,
+  Signal,
   signal,
   Type,
-  WritableSignal,
 } from '@angular/core';
 import { ConfirmationService, SortEvent } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { TableFilterEvent, TablePageEvent } from 'primeng/table';
+import { Table, TableFilterEvent, TablePageEvent } from 'primeng/table';
 
 import { DialogFooterComponent } from '../dialog-footer/dialog-footer.component';
 import { DEFAULT_ROWS_PER_PAGE_OPTIONS } from '../shared/default-rows-per-page-options';
@@ -30,30 +30,40 @@ export abstract class TableComponent implements OnInit {
   protected abstract readonly dialogComponent: Type<unknown>;
   protected abstract readonly tableService: TableService;
 
-  protected addedItemIds: WritableSignal<number[]> = signal([]);
+  protected addedItemIds: Signal<number[]> = signal([]);
   protected dialogHeader?: string;
-  protected findAllResult: WritableSignal<FindAll | null> = signal(null);
-  protected isLoading: WritableSignal<boolean> = signal(false);
+  protected findAllResult: Signal<FindAll | null> = signal(null);
+  protected isLoading: Signal<boolean> = signal(false);
   protected item?: Item;
-  protected rowsPerPage: WritableSignal<number> = signal(0);
+  protected localStorageKey = '';
+  protected rowsPerPage: Signal<number> = signal(0);
   protected readonly rowsPerPageOptions = DEFAULT_ROWS_PER_PAGE_OPTIONS;
 
   ngOnInit(): void {
     this.addedItemIds = this.tableService.addedItemIds;
     this.findAllResult = this.tableService.findAllResult;
     this.isLoading = this.tableService.isLoading;
+    this.localStorageKey = this.tableService.localStorageKey;
     this.rowsPerPage = this.tableService.rowsPerPage;
 
     this.tableService.load();
   }
 
-  protected add(dialogHeader?: string): void {
+  protected onAdd(dialogHeader?: string): void {
     this.dialogHeader = dialogHeader ?? 'Добавление';
     this.item = undefined;
-    this.openDialog();
+    this._openDialog();
   }
 
-  protected delete(item: Item, header = 'Удаление'): void {
+  protected onClear(table: Table) {
+    table.clear();
+    table.clearState();
+    table.reset();
+
+    this.tableService.clear();
+  }
+
+  protected onDelete(item: Item, header = 'Удаление'): void {
     let itemName = 'эту запись';
 
     if (item.name) {
@@ -77,13 +87,25 @@ export abstract class TableComponent implements OnInit {
     });
   }
 
-  protected edit(item: Item, dialogHeader?: string): void {
+  protected onEdit(item: Item, dialogHeader?: string): void {
     this.dialogHeader = dialogHeader ?? 'Редактирование';
     this.item = item;
-    this.openDialog();
+    this._openDialog();
   }
 
-  protected openDialog(): void {
+  protected onFilter(event: TableFilterEvent): void {
+    this.tableService.onFilter(event);
+  }
+
+  protected onPageChange(event: TablePageEvent): void {
+    this.tableService.onPageChange(event);
+  }
+
+  protected onSort(event: SortEvent): void {
+    this.tableService.onSort(event);
+  }
+
+  private _openDialog(): void {
     this._dialogService.open(this.dialogComponent, {
       closable: true,
       data: {
@@ -99,22 +121,6 @@ export abstract class TableComponent implements OnInit {
       },
       width: '50vw',
     });
-  }
-
-  protected load(offset = 0): void {
-    this.tableService.load(offset);
-  }
-
-  protected onFilter(event: TableFilterEvent): void {
-    this.tableService.filter(event);
-  }
-
-  protected onPageChange(event: TablePageEvent): void {
-    this.tableService.onPageChange(event);
-  }
-
-  protected onSort(event: SortEvent): void {
-    this.tableService.sort(event);
   }
 
   private _submit(item: Item): void {

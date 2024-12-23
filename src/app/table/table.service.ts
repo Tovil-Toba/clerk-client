@@ -1,6 +1,12 @@
 import { DestroyRef, inject, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MessageService, SortEvent } from 'primeng/api';
+import { LocalStorageService } from 'ngx-webstorage';
+import {
+  FilterMetadata,
+  MessageService,
+  SortEvent,
+  TableState,
+} from 'primeng/api';
 import { TableFilterEvent, TablePageEvent } from 'primeng/table';
 import { catchError, finalize, of } from 'rxjs';
 
@@ -14,6 +20,30 @@ import { getItemName } from '../shared/getItemName';
 import { Item } from '../shared/item.model';
 
 export abstract class TableService {
+  private readonly _localStorageService = inject(LocalStorageService);
+
+  private readonly _localStorageKey = this.constructor.name
+    .replace('_', '')
+    .replace('Service', '')
+    .toLowerCase();
+
+  private readonly _tableState?: TableState =
+    this._localStorageService.retrieve(this._localStorageKey);
+
+  private _filters: Record<string, string> = {};
+  private _filterValues: Record<string, string> = {};
+
+  private _order =
+    this._tableState?.sortOrder && this._tableState.sortOrder < 0
+      ? OrderEnum.Desc
+      : OrderEnum.Asc;
+
+  private _orderField = this._tableState?.sortField
+    ? `${this._tableState?.sortField}-order`
+    : '';
+
+  private _tableFilters = this._tableState?.filters ?? {};
+
   protected readonly apiService = inject(ApiService);
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly messageService = inject(MessageService);
@@ -27,12 +57,23 @@ export abstract class TableService {
   abstract readonly findAllResult: WritableSignal<FindAll | null>;
 
   readonly addedItemIds = signal<number[]>([]);
-  readonly filters = signal<Record<string, string>>({});
-  readonly filterValues = signal<Record<string, string>>({});
   readonly isLoading = signal<boolean>(false);
-  readonly order = signal<OrderEnum>(OrderEnum.Asc);
-  readonly orderField = signal<string>('');
-  readonly rowsPerPage = signal<number>(DEFAULT_ROWS_PER_PAGE);
+
+  readonly rowsPerPage = signal<number>(
+    this._tableState?.rows ?? DEFAULT_ROWS_PER_PAGE,
+  );
+
+  get localStorageKey(): string {
+    return this._localStorageKey;
+  }
+
+  clear(): void {
+    this._order = OrderEnum.Asc;
+    this._orderField = '';
+    this._tableFilters = {};
+
+    this.load();
+  }
 
   create<T extends Item>(params: { body: T }): void {
     this.isLoading.set(true);
@@ -78,56 +119,17 @@ export abstract class TableService {
       });
   }
 
-  filter(event: TableFilterEvent): void {
-    const filters: Record<string, string> = {};
-    const filterValues: Record<string, string> = {};
-
-    if (!event.filters) {
-      this.filterValues.set(filterValues);
-      this.filters.set(filters);
-
-      return;
-    }
-
-    Object.keys(event.filters).forEach((field) => {
-      const filterField = `${field}-filter`;
-      const filter = event.filters?.[field]?.matchMode;
-      let filterValue = event.filters?.[field]?.value;
-
-      if (!filter || !filterValue || filterValue === '') {
-        return;
-      }
-
-      if (filterValue instanceof Date) {
-        filterValue = new Date(
-          filterValue.getTime() - filterValue.getTimezoneOffset() * 60000,
-        )
-          .toISOString()
-          .split('T')[0];
-      } else if (filterValue?.id) {
-        filterValue = filterValue.id;
-      }
-
-      filters[filterField] = FILTERS[filter];
-      filterValues[field] = filterValue;
-    });
-
-    this.filters.set(filters);
-    this.filterValues.set(filterValues);
-
-    this.load();
-  }
-
   load(offset = 0, limit = this.rowsPerPage()): void {
-    this.addedItemIds.set([]);
     this.isLoading.set(true);
+    this._initFilters();
+    this.addedItemIds.set([]);
 
     const params = {
       offset,
       limit,
-      [this.orderField()]: this.order(),
-      ...this.filters(),
-      ...this.filterValues(),
+      [this._orderField]: this._order,
+      ...this._filters,
+      ...this._filterValues,
     };
 
     this.apiService
@@ -143,9 +145,34 @@ export abstract class TableService {
     this.load(0, 0);
   }
 
+  onFilter(event: TableFilterEvent): void {
+    if (!event.filters) {
+      this._tableFilters = {};
+
+      return;
+    }
+
+    this._tableFilters = event.filters as Record<
+      string,
+      FilterMetadata | FilterMetadata[]
+    >;
+
+    this.load();
+  }
+
   onPageChange(event: TablePageEvent): void {
     this.rowsPerPage.set(event.rows);
+
     this.load(event.first);
+  }
+
+  onSort(event: SortEvent): void {
+    this._order =
+      event?.order && event.order < 0 ? OrderEnum.Desc : OrderEnum.Asc;
+
+    this._orderField = `${event.field}-order`;
+
+    this.load();
   }
 
   remove<T extends Item>(item: T): void {
@@ -185,15 +212,51 @@ export abstract class TableService {
       });
   }
 
-  sort(event: SortEvent): void {
-    const orderField = `${event.field}-order`;
-    const order =
-      event?.order && event.order < 0 ? OrderEnum.Desc : OrderEnum.Asc;
+  private _initFilters(): void {
+    const filters: Record<string, string> = {};
+    const filterValues: Record<string, string> = {};
 
-    this.orderField.set(orderField);
-    this.order.set(order);
+    if (!Object.keys(this._tableFilters).length) {
+      this._filters = filters;
+      this._filterValues = filterValues;
 
-    this.load();
+      return;
+    }
+    Object.entries(this._tableFilters).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        return;
+      }
+
+      const filterField = `${key}-filter`;
+      const filter = value.matchMode;
+      let filterValue = value.value;
+
+      if (!filter || !filterValue || filterValue === '') {
+        return;
+      }
+
+      if (filter.startsWith('date')) {
+        const time =
+          filterValue instanceof Date
+            ? filterValue.getTime()
+            : Date.parse(filterValue);
+
+        const timeOffset =
+          (filterValue instanceof Date
+            ? filterValue.getTimezoneOffset()
+            : new Date().getTimezoneOffset()) * 60000;
+
+        filterValue = new Date(time - timeOffset).toISOString().split('T')[0];
+      } else if (filterValue?.id) {
+        filterValue = filterValue.id;
+      }
+
+      filters[filterField] = FILTERS[filter];
+      filterValues[key] = filterValue;
+    });
+
+    this._filters = filters;
+    this._filterValues = filterValues;
   }
 
   update<T extends Item>(params: { id: number; body: T }): void {

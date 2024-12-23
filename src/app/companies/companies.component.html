@@ -3,6 +3,7 @@
 
 <div class="h-full">
   <p-table
+    #table
     alwaysShowPaginator="true"
     lazy
     [loading]="isLoading()"
@@ -22,9 +23,15 @@
     (onFilter)="onFilter($event)"
     (onPage)="onPageChange($event)"
     (onSort)="onSort($event)"
+    stateStorage="local"
+    [stateKey]="localStorageKey"
   >
     <ng-template pTemplate="caption">
-      <app-table-header name="Компании" (add)="add('Добавление компании')" />
+      <app-table-header
+        name="Компании"
+        (add)="onAdd('Добавление компании')"
+        (clear)="onClear(table)"
+      />
     </ng-template>
 
     <ng-template pTemplate="header">
@@ -203,8 +210,8 @@
         <td>{{ company.updatedAt | date: "dd.MM.yyyy" }}</td>
         <td>
           <app-table-actions
-            (delete)="delete(company, 'Удаление компании')"
-            (edit)="edit(company, 'Редактирование компании')"
+            (delete)="onDelete(company, 'Удаление компании')"
+            (edit)="onEdit(company, 'Редактирование компании')"
           />
         </td>
       </tr>

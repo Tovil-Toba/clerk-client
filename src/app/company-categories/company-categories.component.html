@@ -3,34 +3,34 @@
 
 <div class="h-full">
   <p-table
+    #table
     alwaysShowPaginator="true"
     lazy
     [loading]="isLoading()"
     paginator
     paginatorDropdownAppendTo="table"
     paginatorStyleClass="dropdown-top"
-    resizableColumns
+    [resizableColumns]="false"
     [rows]="rowsPerPage()"
     [rowsPerPageOptions]="rowsPerPageOptions"
     scrollable
     scrollHeight="flex"
     showGridlines
     size="small"
-    styleClass="paginator-dropdown-top p-datatable-gridlines"
+    styleClass="paginator-dropdown-top"
     [totalRecords]="findAllResultValue?.count ?? 0"
     [value]="findAllResultValue?.items ?? []"
     (onFilter)="onFilter($event)"
     (onPage)="onPageChange($event)"
     (onSort)="onSort($event)"
-    [tableStyle]="{ 'min-width': '50rem' }"
     stateStorage="local"
-    dataKey="id"
-    editMode="row"
+    [stateKey]="localStorageKey"
   >
     <ng-template pTemplate="caption">
       <app-table-header
         name="Категории компаний"
-        (add)="add('Добавление категории компаний')"
+        (add)="onAdd('Добавление категории компаний')"
+        (clear)="onClear(table)"
       />
     </ng-template>
 
@@ -82,10 +82,13 @@
         <td>
           <app-table-actions
             (delete)="
-              delete(companyCategoriesValue, 'Удаление категории компаний')
+              onDelete(companyCategoriesValue, 'Удаление категории компаний')
             "
             (edit)="
-              edit(companyCategoriesValue, 'Редактирование категории компаний')
+              onEdit(
+                companyCategoriesValue,
+                'Редактирование категории компаний'
+              )
             "
           />
         </td>

@@ -1,10 +1,15 @@
 <div class="flex items-center justify-between">
   <span class="text-xl font-bold">{{ name() }}</span>
-  <p-button
-    icon="fa-solid fa-plus"
-    rounded
-    raised
-    size="small"
-    (click)="onAdd()"
-  />
+
+  <div class="flex gap-1">
+    <p-button
+      icon="pi pi-filter-slash"
+      rounded
+      size="small"
+      severity="secondary"
+      (click)="onClear()"
+    />
+
+    <p-button icon="pi pi-plus" rounded size="small" (click)="onAdd()" />
+  </div>
 </div>

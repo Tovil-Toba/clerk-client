@@ -3,32 +3,35 @@
 
 <div class="h-full">
   <p-table
+    #table
     alwaysShowPaginator="true"
     lazy
     [loading]="isLoading()"
     paginator
     paginatorDropdownAppendTo="table"
     paginatorStyleClass="dropdown-top"
-    resizableColumns
+    [resizableColumns]="false"
     [rows]="rowsPerPage()"
     [rowsPerPageOptions]="rowsPerPageOptions"
     scrollable
     scrollHeight="flex"
     showGridlines
     size="small"
-    styleClass="paginator-dropdown-top p-datatable-gridlines"
+    styleClass="paginator-dropdown-top"
     [totalRecords]="findAllResultValue?.count ?? 0"
     [value]="findAllResultValue?.items ?? []"
     (onFilter)="onFilter($event)"
     (onPage)="onPageChange($event)"
     (onSort)="onSort($event)"
-    [tableStyle]="{ 'min-width': '50rem' }"
     stateStorage="local"
-    dataKey="id"
-    editMode="row"
+    [stateKey]="localStorageKey"
   >
     <ng-template pTemplate="caption">
-      <app-table-header name="Менеджеры" (add)="add('Добавление менеджера')" />
+      <app-table-header
+        name="Менеджеры"
+        (add)="onAdd('Добавление менеджера')"
+        (clear)="onClear(table)"
+      />
     </ng-template>
 
     <ng-template pTemplate="header">
@@ -124,8 +127,8 @@
         <td>{{ manager.updatedAt | date: "dd.MM.yyyy" }}</td>
         <td>
           <app-table-actions
-            (delete)="delete(manager, 'Удаление менеджера')"
-            (edit)="edit(manager, 'Редактирование менеджера')"
+            (delete)="onDelete(manager, 'Удаление менеджера')"
+            (edit)="onEdit(manager, 'Редактирование менеджера')"
           />
         </td>
       </tr>

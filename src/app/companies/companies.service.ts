@@ -11,7 +11,7 @@ import { TableService } from '../table/table.service';
 export class CompaniesService extends TableService {
   readonly createFn = companiesControllerCreate;
   readonly findAllFn = companiesControllerFindAll;
-  readonly removeFn = companiesControllerRemove;
   readonly findAllResult = signal<FindAllCompaniesDto | null>(null);
+  readonly removeFn = companiesControllerRemove;
   readonly updateFn = companiesControllerUpdate;
 }

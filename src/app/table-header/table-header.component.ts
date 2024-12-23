@@ -17,8 +17,13 @@ export class TableHeaderComponent {
   name = input<string>();
 
   add = output<void>();
+  clear = output<void>();
 
   protected onAdd(): void {
     this.add.emit();
+  }
+
+  protected onClear(): void {
+    this.clear.emit();
   }
 }

@@ -1,11 +1,6 @@
-import {
-  Injectable,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, Observable, tap } from 'rxjs';
-// import {FindManagerNamesDto} from '../../api/models/find-manager-names-dto';
 import { map } from 'rxjs/operators';
 
 import { managersControllerCreate } from '../../api/fn/managers/managers-controller-create';
