@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnInit,
   Signal,
@@ -12,6 +13,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { Table, TableFilterEvent, TablePageEvent } from 'primeng/table';
 
 import { DialogFooterComponent } from '../dialog-footer/dialog-footer.component';
+import { Column } from '../shared/column.model';
 import { DEFAULT_ROWS_PER_PAGE_OPTIONS } from '../shared/default-rows-per-page-options';
 import { FindAll } from '../shared/find-all.model';
 import { getItemName } from '../shared/getItemName';
@@ -27,12 +29,23 @@ export abstract class TableComponent implements OnInit {
   private readonly _confirmationService = inject(ConfirmationService);
   private readonly _dialogService = inject(DialogService);
 
+  protected abstract readonly columns: Column[];
   protected abstract readonly dialogComponent: Type<unknown>;
   protected abstract readonly tableService: TableService;
 
   protected addedItemIds: Signal<number[]> = signal([]);
   protected dialogHeader?: string;
   protected findAllResult: Signal<FindAll | null> = signal(null);
+  protected hiddenColumns: Signal<string[]> = signal([]);
+
+  protected readonly selectedColumns: Signal<Column[]> = computed(() => {
+    const hiddenColumns = this.hiddenColumns();
+
+    return this.columns.filter(
+      (column) => !hiddenColumns.includes(column.field),
+    );
+  });
+
   protected isLoading: Signal<boolean> = signal(false);
   protected item?: Item;
   protected localStorageKey = '';
@@ -42,6 +55,7 @@ export abstract class TableComponent implements OnInit {
   ngOnInit(): void {
     this.addedItemIds = this.tableService.addedItemIds;
     this.findAllResult = this.tableService.findAllResult;
+    this.hiddenColumns = this.tableService.hiddenColumns;
     this.isLoading = this.tableService.isLoading;
     this.localStorageKey = this.tableService.localStorageKey;
     this.rowsPerPage = this.tableService.rowsPerPage;
@@ -95,6 +109,10 @@ export abstract class TableComponent implements OnInit {
 
   protected onFilter(event: TableFilterEvent): void {
     this.tableService.onFilter(event);
+  }
+
+  protected onHiddenColumnsChange(hiddenColumns: string[]): void {
+    this.tableService.onHiddenColumnsChange(hiddenColumns);
   }
 
   protected onPageChange(event: TablePageEvent): void {

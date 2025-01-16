@@ -9,6 +9,7 @@ import { ManagerDialogComponent } from '../manager-dialog/manager-dialog.compone
 import { TableComponent } from '../table/table.component';
 import { TableActionsComponent } from '../table-actions/table-actions.component';
 import { TableHeaderComponent } from '../table-header/table-header.component';
+import { MANAGER_COLUMNS } from './manager-columns';
 import { ManagersService } from './managers.service';
 
 @Component({
@@ -30,4 +31,6 @@ import { ManagersService } from './managers.service';
 export class ManagersComponent extends TableComponent {
   protected readonly dialogComponent = ManagerDialogComponent;
   protected readonly tableService = inject(ManagersService);
+
+  protected readonly columns = MANAGER_COLUMNS;
 }

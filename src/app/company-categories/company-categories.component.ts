@@ -10,6 +10,7 @@ import { TableComponent } from '../table/table.component';
 import { TableActionsComponent } from '../table-actions/table-actions.component';
 import { TableHeaderComponent } from '../table-header/table-header.component';
 import { CompanyCategoriesService } from './company-categories.service';
+import { COMPANY_CATEGORY_COLUMNS } from './company-category-columns';
 
 @Component({
   selector: 'app-company-categories',
@@ -30,4 +31,6 @@ import { CompanyCategoriesService } from './company-categories.service';
 export class CompanyCategoriesComponent extends TableComponent {
   protected readonly dialogComponent = CompanyCategoryDialogComponent;
   protected readonly tableService = inject(CompanyCategoriesService);
+
+  protected readonly columns = COMPANY_CATEGORY_COLUMNS;
 }

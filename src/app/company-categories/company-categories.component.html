@@ -5,6 +5,7 @@
   <p-table
     #table
     alwaysShowPaginator="true"
+    [columns]="selectedColumns()"
     lazy
     [loading]="isLoading()"
     paginator
@@ -28,67 +29,53 @@
   >
     <ng-template pTemplate="caption">
       <app-table-header
-        name="Категории компаний"
+        title="Категории компаний"
+        [columns]="columns"
         (add)="onAdd('Добавление категории компаний')"
         (clear)="onClear(table)"
+        [hiddenColumns]="hiddenColumns()"
+        (hiddenColumnsChange)="onHiddenColumnsChange($event)"
       />
     </ng-template>
 
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header" let-columns>
       <tr [style.height.px]="46">
-        <!--<th class="text-nowrap" pResizableColumn pSortableColumn="id">
-          Id
-          <p-sortIcon field="id" />
-        </th>-->
-        <th class="text-nowrap" pResizableColumn pSortableColumn="name">
-          Название
-          <p-sortIcon field="name" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="createdAt">
-          Дата создания
-          <p-sortIcon field="createdAt" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="updatedAt">
-          Дата изменения
-          <p-sortIcon field="updatedAt" />
-        </th>
+        @for (column of columns; track column.field) {
+          <th class="text-nowrap" [pSortableColumn]="column.field">
+            {{ column.header }}
+            <p-sortIcon [field]="column.field" />
+          </th>
+        }
         <th>Действия</th>
       </tr>
       <tr>
-        <!--<th pResizableColumn>
-          <p-columnFilter type="numeric" field="id" />
-        </th>-->
-        <th pResizableColumn>
-          <p-columnFilter type="text" field="name" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="date" field="createdAt" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="date" field="updatedAt" />
-        </th>
+        @for (column of columns; track column.field) {
+          <th>
+            <p-columnFilter [field]="column.field" [type]="column.filterType" />
+          </th>
+        }
         <th></th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-companyCategoriesValue>
-      @let isAddedItem = addedItemIdsValue.includes(companyCategoriesValue.id);
+    <ng-template pTemplate="body" let-companyCategory let-columns="columns">
+      @let isAddedItem = addedItemIdsValue.includes(companyCategory.id);
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
-        <!--<td>{{ companyCategoriesValue.id }}</td>-->
-        <td>{{ companyCategoriesValue.name }}</td>
-        <td>{{ companyCategoriesValue.createdAt | date: "dd.MM.yyyy" }}</td>
-        <td>{{ companyCategoriesValue.updatedAt | date: "dd.MM.yyyy" }}</td>
+        @for (column of columns; track column.field) {
+          <td>
+            {{
+              column.filterType === "date"
+                ? (companyCategory[column.field] | date: "dd.MM.yyyy")
+                : companyCategory[column.field]
+            }}
+          </td>
+        }
         <td>
           <app-table-actions
-            (delete)="
-              onDelete(companyCategoriesValue, 'Удаление категории компаний')
-            "
+            (delete)="onDelete(companyCategory, 'Удаление категории компаний')"
             (edit)="
-              onEdit(
-                companyCategoriesValue,
-                'Редактирование категории компаний'
-              )
+              onEdit(companyCategory, 'Редактирование категории компаний')
             "
           />
         </td>

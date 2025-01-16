@@ -27,6 +27,8 @@ export abstract class TableService {
     .replace('Service', '')
     .toLowerCase();
 
+  private readonly _hiddenColumnsKey = `${this._localStorageKey}-hidden-columns`;
+
   private readonly _tableState?: TableState =
     this._localStorageService.retrieve(this._localStorageKey);
 
@@ -57,6 +59,11 @@ export abstract class TableService {
   abstract readonly findAllResult: WritableSignal<FindAll | null>;
 
   readonly addedItemIds = signal<number[]>([]);
+
+  readonly hiddenColumns = signal<string[]>(
+    this._localStorageService.retrieve(this._hiddenColumnsKey) ?? ['id'],
+  );
+
   readonly isLoading = signal<boolean>(false);
 
   readonly rowsPerPage = signal<number>(
@@ -158,6 +165,11 @@ export abstract class TableService {
     >;
 
     this.load();
+  }
+
+  onHiddenColumnsChange(hiddenColumns: string[]): void {
+    this.hiddenColumns.set(hiddenColumns);
+    this._localStorageService.store(this._hiddenColumnsKey, hiddenColumns);
   }
 
   onPageChange(event: TablePageEvent): void {

@@ -18,6 +18,7 @@ import { TableComponent } from '../table/table.component';
 import { TableActionsComponent } from '../table-actions/table-actions.component';
 import { TableHeaderComponent } from '../table-header/table-header.component';
 import { CompaniesService } from './companies.service';
+import { COMPANY_COLUMNS } from './company-columns';
 
 @Component({
   selector: 'app-companies',
@@ -28,10 +29,10 @@ import { CompaniesService } from './companies.service';
     DatePipe,
     FormsModule,
     Select,
-    UserNameShortPipe,
     TableActionsComponent,
     TableHeaderComponent,
     TableModule,
+    UserNameShortPipe,
   ],
   providers: [CompaniesService, CompanyCategoriesService, ManagersService],
   templateUrl: './companies.component.html',
@@ -41,6 +42,7 @@ export class CompaniesComponent extends TableComponent implements OnInit {
   private readonly _companyCategoriesService = inject(CompanyCategoriesService);
   private readonly _managersService = inject(ManagersService);
 
+  protected readonly columns = COMPANY_COLUMNS;
   protected readonly dialogComponent = CompanyDialogComponent;
   protected readonly tableService = inject(CompaniesService);
 

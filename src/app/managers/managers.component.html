@@ -5,6 +5,7 @@
   <p-table
     #table
     alwaysShowPaginator="true"
+    [columns]="selectedColumns()"
     lazy
     [loading]="isLoading()"
     paginator
@@ -28,103 +29,48 @@
   >
     <ng-template pTemplate="caption">
       <app-table-header
-        name="Менеджеры"
+        title="Менеджеры"
+        [columns]="columns"
         (add)="onAdd('Добавление менеджера')"
         (clear)="onClear(table)"
+        [hiddenColumns]="hiddenColumns()"
+        (hiddenColumnsChange)="onHiddenColumnsChange($event)"
       />
     </ng-template>
 
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header" let-columns>
       <tr [style.height.px]="46">
-        <!--<th class="text-nowrap" pResizableColumn pSortableColumn="id">
-          Id
-          <p-sortIcon field="id" />
-        </th>-->
-        <th class="text-nowrap" pResizableColumn pSortableColumn="name.first">
-          Фамилия
-          <p-sortIcon field="name.first" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="name.last">
-          Имя
-          <p-sortIcon field="name.last" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="name.middle">
-          Отчество
-          <p-sortIcon field="name.middle" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="phone">
-          Телефон
-          <p-sortIcon field="phone" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="email">
-          Адреса электронной почты
-          <p-sortIcon field="email" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="createdAt">
-          Дата создания
-          <p-sortIcon field="createdAt" />
-        </th>
-        <th class="text-nowrap" pResizableColumn pSortableColumn="updatedAt">
-          Дата изменения
-          <p-sortIcon field="updatedAt" />
-        </th>
+        @for (column of columns; track column.field) {
+          <th class="text-nowrap" [pSortableColumn]="column.field">
+            {{ column.header }}
+            <p-sortIcon [field]="column.field" />
+          </th>
+        }
         <th>Действия</th>
       </tr>
       <tr>
-        <!--<th pResizableColumn>
-          <p-columnFilter type="numeric" field="id" />
-        </th>-->
-        <th pResizableColumn>
-          <p-columnFilter type="text" field="name.last" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="text" field="name.first" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="text" field="name.middle" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="text" field="phone" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="text" field="email" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="date" field="createdAt" />
-        </th>
-        <th pResizableColumn>
-          <p-columnFilter type="date" field="updatedAt" />
-        </th>
+        @for (column of columns; track column.field) {
+          <th>
+            <p-columnFilter [field]="column.field" [type]="column.filterType" />
+          </th>
+        }
         <th></th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-manager>
+    <ng-template pTemplate="body" let-manager let-columns="columns">
       @let isAddedItem = addedItemIdsValue.includes(manager.id);
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
-        <!--<td>{{ manager.id }}</td>-->
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input
-                pInputText
-                type="text"
-                [(ngModel)]="manager.name.last"
-                required
-              />
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{ manager.name.last }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td>{{ manager.name.first }}</td>
-        <td>{{ manager.name.middle }}</td>
-        <td>{{ manager.phone }}</td>
-        <td>{{ manager.email }}</td>
-        <td>{{ manager.createdAt | date: "dd.MM.yyyy" }}</td>
-        <td>{{ manager.updatedAt | date: "dd.MM.yyyy" }}</td>
+        @for (column of columns; track column.field) {
+          <td>
+            {{
+              column.filterType === "date"
+                ? (manager[column.field] | date: "dd.MM.yyyy")
+                : manager[column.field]
+            }}
+          </td>
+        }
         <td>
           <app-table-actions
             (delete)="onDelete(manager, 'Удаление менеджера')"
