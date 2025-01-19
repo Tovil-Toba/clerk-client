@@ -8,6 +8,7 @@ import {
   signal,
   Type,
 } from '@angular/core';
+import { get } from 'lodash';
 import { ConfirmationService, SortEvent } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table, TableFilterEvent, TablePageEvent } from 'primeng/table';
@@ -61,6 +62,11 @@ export abstract class TableComponent implements OnInit {
     this.rowsPerPage = this.tableService.rowsPerPage;
 
     this.tableService.load();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected getFieldValue(row: object, field: string): any {
+    return get(row, field);
   }
 
   protected onAdd(dialogHeader?: string): void {

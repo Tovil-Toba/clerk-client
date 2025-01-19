@@ -129,19 +129,14 @@
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
         @for (column of columns; track column.field) {
+          @let value = getFieldValue(company, column.field);
           <td>
-            @if (column.field === "category.name" && company.category) {
-              {{ company.category.name }}
-            } @else if (
-              column.field === "manager.name.last" && company.manager
-            ) {
+            @if (column.field === "manager.name.last" && company.manager) {
               {{ company.manager.name | userNameShort }}
             } @else if (column.filterType === "date") {
-              {{ company[column.field] | date: "dd.MM.yyyy" }}
-            } @else if (company[column.field]) {
-              {{ company[column.field] }}
+              {{ value | date: "dd.MM.yyyy" }}
             } @else {
-              <!--{{ "-" }}-->
+              {{ value }}
             }
           </td>
         }

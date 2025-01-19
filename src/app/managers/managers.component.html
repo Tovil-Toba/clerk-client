@@ -63,11 +63,12 @@
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
         @for (column of columns; track column.field) {
+          @let value = getFieldValue(manager, column.field);
           <td>
             {{
               column.filterType === "date"
-                ? (manager[column.field] | date: "dd.MM.yyyy")
-                : manager[column.field]
+                ? (value | date: "dd.MM.yyyy")
+                : value
             }}
           </td>
         }
