@@ -14,7 +14,6 @@ import { ManagersService } from '../managers/managers.service';
 
 @Component({
   selector: 'app-company-category-dialog',
-  standalone: true,
   imports: [InputTextModule, FormsModule, ReactiveFormsModule, ButtonModule],
   providers: [ManagersService],
   templateUrl: './company-category-dialog.component.html',

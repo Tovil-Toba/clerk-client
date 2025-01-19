@@ -14,7 +14,6 @@ import { ManagersService } from './managers.service';
 
 @Component({
   selector: 'app-managers',
-  standalone: true,
   imports: [
     ButtonModule,
     DatePipe,

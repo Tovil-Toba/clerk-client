@@ -14,7 +14,6 @@ import { HEADER_MENU_ITEMS } from './header-menu-items';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [ButtonModule, MenubarModule, RouterLink],
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

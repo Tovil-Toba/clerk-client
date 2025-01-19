@@ -14,7 +14,6 @@ import { Column } from '../shared/column.model';
 
 @Component({
   selector: 'app-table-header',
-  standalone: true,
   imports: [ButtonModule, FormsModule, MultiSelect],
   templateUrl: './table-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

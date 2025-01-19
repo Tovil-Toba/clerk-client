@@ -14,7 +14,6 @@ import { COMPANY_CATEGORY_COLUMNS } from './company-category-columns';
 
 @Component({
   selector: 'app-company-categories',
-  standalone: true,
   imports: [
     TableModule,
     ButtonModule,

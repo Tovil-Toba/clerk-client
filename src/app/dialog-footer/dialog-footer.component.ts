@@ -5,7 +5,6 @@ import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-dialog-footer',
-  standalone: true,
   imports: [ButtonModule, Ripple],
   templateUrl: './dialog-footer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

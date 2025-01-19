@@ -20,7 +20,6 @@ import { UserNameLongPipe } from '../shared/user-name-long.pipe';
 
 @Component({
   selector: 'app-company-dialog',
-  standalone: true,
   imports: [
     AsyncPipe,
     InputTextModule,

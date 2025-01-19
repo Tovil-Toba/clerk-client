@@ -22,7 +22,6 @@ import { COMPANY_COLUMNS } from './company-columns';
 
 @Component({
   selector: 'app-companies',
-  standalone: true,
   imports: [
     AsyncPipe,
     ButtonModule,

@@ -4,7 +4,6 @@ import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-table-actions',
-  standalone: true,
   imports: [ButtonModule, Ripple],
   templateUrl: './table-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

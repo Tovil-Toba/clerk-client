@@ -10,16 +10,13 @@ import { ToastModule } from 'primeng/toast';
 
 import { ApiService } from '../api/api.service';
 import { ApiConfiguration } from '../api/api-configuration';
-import { CompaniesComponent } from './companies/companies.component';
 import { DarkModeService } from './core/dark-mode.service';
 import { HeaderComponent } from './header/header.component';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     CardModule,
-    CompaniesComponent,
     ConfirmDialogModule,
     HeaderComponent,
     PanelModule,
