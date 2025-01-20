@@ -10,6 +10,7 @@ import { ToastModule } from 'primeng/toast';
 
 import { ApiService } from '../api/api.service';
 import { ApiConfiguration } from '../api/api-configuration';
+import { environment } from '../environments/environment';
 import { DarkModeService } from './core/dark-mode.service';
 import { HeaderComponent } from './header/header.component';
 
@@ -33,7 +34,7 @@ export class AppComponent {
   private readonly _darkModeService = inject(DarkModeService);
 
   constructor() {
-    this._apiConfiguration.rootUrl = 'http://localhost:3000';
+    this._apiConfiguration.rootUrl = environment.apiUrl;
 
     this._darkModeService.init();
   }
