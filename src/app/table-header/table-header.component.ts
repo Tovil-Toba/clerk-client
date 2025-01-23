@@ -21,10 +21,10 @@ import { Column } from '../shared/column.model';
 export class TableHeaderComponent implements OnInit {
   columns = input<Column[]>([]);
   hiddenColumns = input<string[]>([]);
-  title = input<string>();
+  name = input<string>();
 
   add = output<void>();
-  clear = output<void>();
+  clearFilters = output<void>();
   hiddenColumnsChange = output<string[]>();
 
   protected selectedColumns = signal<Column[]>([]);
@@ -33,8 +33,8 @@ export class TableHeaderComponent implements OnInit {
     this.add.emit();
   }
 
-  protected onClear(): void {
-    this.clear.emit();
+  protected onClearFilters(): void {
+    this.clearFilters.emit();
   }
 
   protected onSelectedColumnsChange(): void {

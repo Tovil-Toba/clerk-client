@@ -47,7 +47,7 @@ export class ContactFacesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactFacesControllerFindAll$Response(params: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactFacesDto>> {
+  contactFacesControllerFindAll$Response(params?: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactFacesDto>> {
     return contactFacesControllerFindAll(this.http, this.rootUrl, params, context);
   }
 
@@ -57,7 +57,7 @@ export class ContactFacesService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  contactFacesControllerFindAll(params: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<FindAllContactFacesDto> {
+  contactFacesControllerFindAll(params?: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<FindAllContactFacesDto> {
     return this.contactFacesControllerFindAll$Response(params, context).pipe(
       map((r: StrictHttpResponse<FindAllContactFacesDto>): FindAllContactFacesDto => r.body)
     );

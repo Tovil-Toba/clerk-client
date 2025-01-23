@@ -28,8 +28,7 @@ import { COMPANY_CATEGORY_COLUMNS } from './company-category-columns';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompanyCategoriesComponent extends TableComponent {
+  protected readonly columns = COMPANY_CATEGORY_COLUMNS;
   protected readonly dialogComponent = CompanyCategoryDialogComponent;
   protected readonly tableService = inject(CompanyCategoriesService);
-
-  protected readonly columns = COMPANY_CATEGORY_COLUMNS;
 }

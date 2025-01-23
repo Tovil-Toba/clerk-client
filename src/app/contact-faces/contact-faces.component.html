@@ -11,6 +11,7 @@
     paginator
     paginatorDropdownAppendTo="table"
     paginatorStyleClass="dropdown-top"
+    [resizableColumns]="false"
     [rows]="rowsPerPage()"
     [rowsPerPageOptions]="rowsPerPageOptions"
     scrollable
@@ -30,9 +31,9 @@
   >
     <ng-template pTemplate="caption">
       <app-table-header
-        name="Компании"
+        name="Контактные лица"
         [columns]="columns"
-        (add)="onAdd('Добавление компании')"
+        (add)="onAdd('Добавление контактного лица')"
         (clearFilters)="onClearFilters(table)"
         [hiddenColumns]="hiddenColumns()"
         (hiddenColumnsChange)="onHiddenColumnsChange($event)"
@@ -49,13 +50,12 @@
         }
         <th>Действия</th>
       </tr>
-
       <tr>
         @for (column of columns; track column.field) {
           <th>
-            @if (column.field === "category.name") {
+            @if (column.field === "company.name") {
               <p-columnFilter
-                field="categoryId"
+                field="companyId"
                 matchMode="equals"
                 [showMenu]="false"
               >
@@ -68,17 +68,17 @@
                     appendTo="body"
                     dataKey="id"
                     filter
-                    [loading]="isCompanyCategoryNamesLoading()"
+                    [loading]="isCompanyNamesLoading()"
                     [(ngModel)]="value!"
-                    [options]="(companyCategoryNames$ | async) ?? []"
+                    [options]="(companyNames$ | async) ?? []"
                     optionLabel="name"
                     (onChange)="filter($event.value)"
                   />
                 </ng-template>
               </p-columnFilter>
-            } @else if (column.field === "manager.name.last") {
+            } @else if (column.field === "position.name") {
               <p-columnFilter
-                field="managerId"
+                field="positionId"
                 matchMode="equals"
                 [showMenu]="false"
               >
@@ -91,29 +91,12 @@
                     appendTo="body"
                     dataKey="id"
                     filter
-                    [loading]="isManagerNamesLoading()"
+                    [loading]="isContactFacePositionNamesLoading()"
                     [(ngModel)]="value!"
-                    [options]="(managerNames$ | async) ?? []"
-                    optionLabel="name.last"
+                    [options]="(contactFacePositionNames$ | async) ?? []"
+                    optionLabel="name"
                     (onChange)="filter($event.value)"
-                  >
-                    <ng-template pTemplate="selectedItem">
-                      @if (value?.name) {
-                        <div class="flex items-center gap-2">
-                          <span>
-                            {{ value.name | userNameShort }}
-                          </span>
-                        </div>
-                      }
-                    </ng-template>
-                    <ng-template let-option pTemplate="item">
-                      <div class="inline-block align-middle">
-                        <span class="ml-1 mt-1">
-                          {{ option.name | userNameShort }}
-                        </span>
-                      </div>
-                    </ng-template>
-                  </p-select>
+                  />
                 </ng-template>
               </p-columnFilter>
             } @else {
@@ -128,26 +111,24 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-company let-columns="columns">
-      @let isAddedItem = addedItemIdsValue.includes(company.id);
+    <ng-template pTemplate="body" let-contactFace let-columns="columns">
+      @let isAddedItem = addedItemIdsValue.includes(contactFace.id);
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
         @for (column of columns; track column.field) {
-          @let value = getFieldValue(company, column.field);
+          @let value = getFieldValue(contactFace, column.field);
           <td>
-            @if (column.field === "manager.name.last" && company.manager) {
-              {{ company.manager.name | userNameShort }}
-            } @else if (column.filterType === "date") {
-              {{ value | date: "dd.MM.yyyy" }}
-            } @else {
-              {{ value }}
-            }
+            {{
+              column.filterType === "date"
+                ? (value | date: "dd.MM.yyyy")
+                : value
+            }}
           </td>
         }
         <td>
           <app-table-actions
-            (delete)="onDelete(company, 'Удаление компании')"
-            (edit)="onEdit(company, 'Редактирование компании')"
+            (delete)="onDelete(contactFace, 'Удаление контактного лица')"
+            (edit)="onEdit(contactFace, 'Редактирование контактного лица')"
           />
         </td>
       </tr>

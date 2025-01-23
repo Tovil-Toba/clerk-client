@@ -28,7 +28,5 @@ export class CompanyCategoryDialogComponent extends DialogComponent {
     name: [this._companyCategory?.name ?? '', Validators.required],
   });
 
-  protected get name() {
-    return this.form.get('name');
-  }
+  protected readonly name = this.form.controls.name;
 }

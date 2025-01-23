@@ -23,7 +23,7 @@ export class ManagerDialogComponent extends DialogComponent {
   private readonly _fb = new FormBuilder();
   private readonly _manager?: Manager = this.dialogConfig.data.item;
 
-  protected form = this._fb.group({
+  protected readonly form = this._fb.group({
     name: this._fb.group({
       last: [this._manager?.name.last ?? '', Validators.required],
       first: [this._manager?.name.first ?? '', Validators.required],
@@ -33,11 +33,6 @@ export class ManagerDialogComponent extends DialogComponent {
     email: [this._manager?.email ?? ''],
   });
 
-  protected get firstName() {
-    return this.form.get('name.first');
-  }
-
-  protected get lastName() {
-    return this.form.get('name.last');
-  }
+  protected readonly firstName = this.form.controls.name.controls.first;
+  protected readonly lastName = this.form.controls.name.controls.last;
 }

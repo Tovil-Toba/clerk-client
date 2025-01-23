@@ -15,11 +15,11 @@ import { Table, TableFilterEvent, TablePageEvent } from 'primeng/table';
 
 import { DialogFooterComponent } from '../dialog-footer/dialog-footer.component';
 import { Column } from '../shared/column.model';
-import { DEFAULT_ROWS_PER_PAGE_OPTIONS } from '../shared/default-rows-per-page-options';
 import { FindAll } from '../shared/find-all.model';
 import { getItemName } from '../shared/getItemName';
 import { Item } from '../shared/item.model';
 import { TableService } from './table.service';
+import { DEFAULT_ROWS_PER_PAGE_OPTIONS } from './table-default-values';
 
 @Component({
   template: '',
@@ -52,6 +52,8 @@ export abstract class TableComponent implements OnInit {
   protected localStorageKey = '';
   protected rowsPerPage: Signal<number> = signal(0);
   protected readonly rowsPerPageOptions = DEFAULT_ROWS_PER_PAGE_OPTIONS;
+  protected sortField: string | null = null;
+  protected sortOrder = 1;
 
   ngOnInit(): void {
     this.addedItemIds = this.tableService.addedItemIds;
@@ -60,6 +62,8 @@ export abstract class TableComponent implements OnInit {
     this.isLoading = this.tableService.isLoading;
     this.localStorageKey = this.tableService.localStorageKey;
     this.rowsPerPage = this.tableService.rowsPerPage;
+    this.sortField = this.tableService.sortField;
+    this.sortOrder = this.tableService.sortOrder;
 
     this.tableService.load();
   }
@@ -75,12 +79,11 @@ export abstract class TableComponent implements OnInit {
     this._openDialog();
   }
 
-  protected onClear(table: Table) {
-    table.clear();
-    table.clearState();
-    table.reset();
+  protected onClearFilters(table: Table) {
+    table.clearFilterValues();
+    table.saveState();
 
-    this.tableService.clear();
+    this.tableService.clearFilters();
   }
 
   protected onDelete(item: Item, header = 'Удаление'): void {

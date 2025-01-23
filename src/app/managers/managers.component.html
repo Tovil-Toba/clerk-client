@@ -18,6 +18,8 @@
     scrollHeight="flex"
     showGridlines
     size="small"
+    [sortField]="sortField"
+    [sortOrder]="sortOrder"
     styleClass="paginator-dropdown-top"
     [totalRecords]="findAllResultValue?.count ?? 0"
     [value]="findAllResultValue?.items ?? []"
@@ -29,10 +31,10 @@
   >
     <ng-template pTemplate="caption">
       <app-table-header
-        title="Менеджеры"
+        name="Менеджеры"
         [columns]="columns"
         (add)="onAdd('Добавление менеджера')"
-        (clear)="onClear(table)"
+        (clearFilters)="onClearFilters(table)"
         [hiddenColumns]="hiddenColumns()"
         (hiddenColumnsChange)="onHiddenColumnsChange($event)"
       />

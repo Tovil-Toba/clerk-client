@@ -13,11 +13,15 @@ import { catchError, finalize, of } from 'rxjs';
 import { ApiFnRequired, ApiService } from '../../api/api.service';
 import { DeleteResultDto } from '../../api/models/delete-result-dto';
 import { OrderEnum } from '../../api/models/order-enum';
-import { DEFAULT_ROWS_PER_PAGE } from '../shared/default-rows-per-page';
 import { FILTERS } from '../shared/filters';
 import { FindAll } from '../shared/find-all.model';
 import { getItemName } from '../shared/getItemName';
 import { Item } from '../shared/item.model';
+import {
+  DEFAULT_ROWS_PER_PAGE,
+  DEFAULT_SORT_FIELD,
+  DEFAULT_SORT_ORDER,
+} from './table-default-values';
 
 export abstract class TableService {
   private readonly _localStorageService = inject(LocalStorageService);
@@ -36,14 +40,12 @@ export abstract class TableService {
   private _filterValues: Record<string, string> = {};
 
   private _order =
-    this._tableState?.sortOrder && this._tableState.sortOrder < 0
+    (this._tableState?.sortOrder && this._tableState.sortOrder < 0) ||
+    DEFAULT_SORT_ORDER < 0
       ? OrderEnum.Desc
       : OrderEnum.Asc;
 
-  private _orderField = this._tableState?.sortField
-    ? `${this._tableState?.sortField}-order`
-    : '';
-
+  private _orderField = `${this._tableState?.sortField ?? DEFAULT_SORT_FIELD}-order`;
   private _tableFilters = this._tableState?.filters ?? {};
 
   protected readonly apiService = inject(ApiService);
@@ -70,13 +72,14 @@ export abstract class TableService {
     this._tableState?.rows ?? DEFAULT_ROWS_PER_PAGE,
   );
 
+  readonly sortField = this._tableState?.sortField ?? DEFAULT_SORT_FIELD;
+  readonly sortOrder = this._tableState?.sortOrder ?? DEFAULT_SORT_ORDER;
+
   get localStorageKey(): string {
     return this._localStorageKey;
   }
 
-  clear(): void {
-    this._order = OrderEnum.Asc;
-    this._orderField = '';
+  clearFilters(): void {
     this._tableFilters = {};
 
     this.load();

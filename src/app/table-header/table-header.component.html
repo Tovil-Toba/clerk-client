@@ -1,15 +1,18 @@
+@let columnsValue = columns();
+
 <div class="flex items-center justify-between">
-  <span class="text-xl font-bold">{{ title() }}</span>
+  <span class="text-xl font-bold">{{ name() }}</span>
 
   <div class="flex gap-2">
     <p-multi-select
-      display="chip"
-      [options]="columns()"
+      appendTo="body"
+      dropdownIcon="fa-solid fa-table-columns"
+      [maxSelectedLabels]="0"
       [(ngModel)]="selectedColumns"
+      [options]="columnsValue"
       optionLabel="header"
-      selectedItemsLabel="{0} столбцов выбрано"
-      [style]="{ 'min-width': '200px' }"
-      placeholder="Выберите столбцы"
+      [placeholder]="'0 из ' + columnsValue.length"
+      [selectedItemsLabel]="'{0} из ' + columnsValue.length"
       (onChange)="onSelectedColumnsChange()"
     />
 
@@ -18,7 +21,7 @@
       rounded
       size="small"
       severity="secondary"
-      (click)="onClear()"
+      (click)="onClearFilters()"
     />
 
     <p-button icon="pi pi-plus" rounded size="small" (click)="onAdd()" />

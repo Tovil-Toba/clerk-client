@@ -31,9 +31,9 @@
   >
     <ng-template pTemplate="caption">
       <app-table-header
-        name="Категории компаний"
+        name="Должности контактных лиц"
         [columns]="columns"
-        (add)="onAdd('Добавление категории компаний')"
+        (add)="onAdd('Добавление должности контактного лица')"
         (clearFilters)="onClearFilters(table)"
         [hiddenColumns]="hiddenColumns()"
         (hiddenColumnsChange)="onHiddenColumnsChange($event)"
@@ -60,12 +60,12 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-companyCategory let-columns="columns">
-      @let isAddedItem = addedItemIdsValue.includes(companyCategory.id);
+    <ng-template pTemplate="body" let-contactFacePosition let-columns="columns">
+      @let isAddedItem = addedItemIdsValue.includes(contactFacePosition.id);
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
         @for (column of columns; track column.field) {
-          @let value = getFieldValue(companyCategory, column.field);
+          @let value = getFieldValue(contactFacePosition, column.field);
           <td>
             {{
               column.filterType === "date"
@@ -76,9 +76,17 @@
         }
         <td>
           <app-table-actions
-            (delete)="onDelete(companyCategory, 'Удаление категории компаний')"
+            (delete)="
+              onDelete(
+                contactFacePosition,
+                'Удаление должности контактного лица'
+              )
+            "
             (edit)="
-              onEdit(companyCategory, 'Редактирование категории компаний')
+              onEdit(
+                contactFacePosition,
+                'Редактирование должности контактного лица'
+              )
             "
           />
         </td>

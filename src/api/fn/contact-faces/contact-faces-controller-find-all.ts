@@ -20,7 +20,7 @@ export interface ContactFacesControllerFindAll$Params {
 /**
  * **Идентификатор компании**
  */
-  companyId: string;
+  companyId?: string;
 
 /**
  * Фильтр
@@ -297,7 +297,7 @@ export interface ContactFacesControllerFindAll$Params {
   limit?: number;
 }
 
-export function contactFacesControllerFindAll(http: HttpClient, rootUrl: string, params: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactFacesDto>> {
+export function contactFacesControllerFindAll(http: HttpClient, rootUrl: string, params?: ContactFacesControllerFindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<FindAllContactFacesDto>> {
   const rb = new RequestBuilder(rootUrl, contactFacesControllerFindAll.PATH, 'get');
   if (params) {
     rb.query('companyId', params.companyId, {"explode":false});

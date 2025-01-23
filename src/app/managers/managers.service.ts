@@ -1,4 +1,4 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
+import { computed, Injectable, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, Observable, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,19 +14,21 @@ import { TableService } from '../table/table.service';
 
 @Injectable()
 export class ManagersService extends TableService {
+  private readonly _isNamesLoading: WritableSignal<boolean> = signal(false);
+
   readonly createFn = managersControllerCreate;
   readonly findAllFn = managersControllerFindAll;
   readonly findAllResult = signal<FindAllManagersDto | null>(null);
   readonly removeFn = managersControllerRemove;
   readonly updateFn = managersControllerUpdate;
 
-  readonly isNamesLoading: WritableSignal<boolean> = signal(false);
+  readonly isNamesLoading = computed(() => this._isNamesLoading());
 
   readonly names$: Observable<FindUserNameDto[]> = this.apiService
     .invoke(managersControllerFindNames)
     .pipe(
-      finalize(() => this.isNamesLoading.set(false)),
-      tap(() => this.isNamesLoading.set(true)),
+      finalize(() => this._isNamesLoading.set(false)),
+      tap(() => this._isNamesLoading.set(true)),
       map((result) => result.items),
       takeUntilDestroyed(this.destroyRef),
     );

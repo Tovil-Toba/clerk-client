@@ -1,5 +1,22 @@
 <form id="dialog-form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
+      <label for="company">Компания <span class="text-red-600">*</span></label>
+      <p-select
+        id="company"
+        dataKey="id"
+        appendTo="body"
+        formControlName="company"
+        optionLabel="name"
+        [loading]="isCompanyNamesLoading()"
+        [options]="(companyNames$ | async) ?? []"
+        (onChange)="selectedCompany.set($event.value)"
+      />
+      @if (company.invalid && (company.dirty || !company.untouched)) {
+        <small class="text-red-600">Укажите компанию.</small>
+      }
+    </div>
+
     <ng-container formGroupName="name">
       <div class="flex flex-col gap-2">
         <label for="name.last"
@@ -26,6 +43,20 @@
     </ng-container>
 
     <div class="flex flex-col gap-2">
+      <label for="company">Должность</label>
+      <p-select
+        id="position"
+        dataKey="id"
+        appendTo="body"
+        formControlName="position"
+        optionLabel="name"
+        [loading]="isPositionNamesLoading()"
+        [options]="(positionNames$ | async) ?? []"
+        (onChange)="selectedPosition.set($event.value)"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
       <label for="phone">Телефон</label>
       <input pInputText id="phone" formControlName="phone" />
     </div>
@@ -33,6 +64,11 @@
     <div class="flex flex-col gap-2">
       <label for="email">Адрес электронной почты</label>
       <input pInputText id="email" formControlName="email" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="notes">Примечания</label>
+      <input pInputText id="notes" formControlName="notes" />
     </div>
   </div>
 </form>

@@ -23,6 +23,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'contact-faces',
+    loadComponent: () =>
+      import('./contact-faces/contact-faces.component').then(
+        (m) => m.ContactFacesComponent,
+      ),
+  },
+  {
+    path: 'contact-face-positions',
+    loadComponent: () =>
+      import('./contact-face-positions/contact-face-positions.component').then(
+        (m) => m.ContactFacePositionsComponent,
+      ),
+  },
+  {
     path: 'managers',
     loadComponent: () =>
       import('./managers/managers.component').then((m) => m.ManagersComponent),

@@ -38,7 +38,7 @@ export class CompanyDialogComponent extends DialogComponent {
   private readonly _companyCategoriesService = inject(CompanyCategoriesService);
   private readonly _managersService = inject(ManagersService);
 
-  readonly isCompanyCategoryNamesLoading =
+  protected readonly isCompanyCategoryNamesLoading =
     this._companyCategoriesService.isNamesLoading;
 
   protected readonly isManagerNamesLoading =
@@ -72,7 +72,5 @@ export class CompanyDialogComponent extends DialogComponent {
     workTime: [this._company?.workTime ?? ''],
   });
 
-  protected get name() {
-    return this.form.get('name');
-  }
+  protected readonly name = this.form.controls.name;
 }
