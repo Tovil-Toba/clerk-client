@@ -1,12 +1,7 @@
 import { DestroyRef, inject, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LocalStorageService } from 'ngx-webstorage';
-import {
-  FilterMetadata,
-  MessageService,
-  SortEvent,
-  TableState,
-} from 'primeng/api';
+import { MessageService, SortEvent, TableState } from 'primeng/api';
 import { TableFilterEvent, TablePageEvent } from 'primeng/table';
 import { catchError, finalize, of } from 'rxjs';
 
@@ -17,6 +12,7 @@ import { FILTERS } from '../shared/filters';
 import { FindAll } from '../shared/find-all.model';
 import { getItemName } from '../shared/getItemName';
 import { Item } from '../shared/item.model';
+import { TableFilters } from '../shared/table-filters.model';
 import {
   DEFAULT_ROWS_PER_PAGE,
   DEFAULT_SORT_FIELD,
@@ -46,7 +42,7 @@ export abstract class TableService {
       : OrderEnum.Asc;
 
   private _orderField = `${this._tableState?.sortField ?? DEFAULT_SORT_FIELD}-order`;
-  private _tableFilters = this._tableState?.filters ?? {};
+  private _tableFilters: TableFilters = this._tableState?.filters ?? {};
 
   protected readonly apiService = inject(ApiService);
   protected readonly destroyRef = inject(DestroyRef);
@@ -162,10 +158,7 @@ export abstract class TableService {
       return;
     }
 
-    this._tableFilters = event.filters as Record<
-      string,
-      FilterMetadata | FilterMetadata[]
-    >;
+    this._tableFilters = event.filters as TableFilters;
 
     this.load();
   }
@@ -225,6 +218,18 @@ export abstract class TableService {
 
         this.findAllResult.set(findAllResult);
       });
+  }
+
+  setTableFilters(filters: TableFilters): void {
+    this._tableFilters = filters;
+
+    const tableState: TableState = this._tableState ?? {};
+
+    tableState.filters = filters;
+    tableState.first = 0;
+    tableState.rows = this.rowsPerPage();
+
+    this._localStorageService.store(this._localStorageKey, tableState);
   }
 
   private _initFilters(): void {

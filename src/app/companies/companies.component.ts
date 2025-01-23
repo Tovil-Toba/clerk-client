@@ -6,6 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { TableModule } from 'primeng/table';
@@ -27,6 +28,7 @@ import { COMPANY_COLUMNS } from './company-columns';
     ButtonModule,
     DatePipe,
     FormsModule,
+    RouterLink,
     Select,
     TableActionsComponent,
     TableHeaderComponent,

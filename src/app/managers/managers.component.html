@@ -6,6 +6,7 @@
     #table
     alwaysShowPaginator="true"
     [columns]="selectedColumns()"
+    [filters]="tableFilters"
     lazy
     [loading]="isLoading()"
     paginator
@@ -20,14 +21,14 @@
     size="small"
     [sortField]="sortField"
     [sortOrder]="sortOrder"
+    [stateKey]="localStorageKey"
+    stateStorage="local"
     styleClass="paginator-dropdown-top"
     [totalRecords]="findAllResultValue?.count ?? 0"
     [value]="findAllResultValue?.items ?? []"
     (onFilter)="onFilter($event)"
     (onPage)="onPageChange($event)"
     (onSort)="onSort($event)"
-    stateStorage="local"
-    [stateKey]="localStorageKey"
   >
     <ng-template pTemplate="caption">
       <app-table-header

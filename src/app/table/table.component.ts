@@ -18,6 +18,7 @@ import { Column } from '../shared/column.model';
 import { FindAll } from '../shared/find-all.model';
 import { getItemName } from '../shared/getItemName';
 import { Item } from '../shared/item.model';
+import { TableFilters } from '../shared/table-filters.model';
 import { TableService } from './table.service';
 import { DEFAULT_ROWS_PER_PAGE_OPTIONS } from './table-default-values';
 
@@ -54,6 +55,7 @@ export abstract class TableComponent implements OnInit {
   protected readonly rowsPerPageOptions = DEFAULT_ROWS_PER_PAGE_OPTIONS;
   protected sortField: string | null = null;
   protected sortOrder = 1;
+  protected tableFilters: TableFilters = {};
 
   ngOnInit(): void {
     this.addedItemIds = this.tableService.addedItemIds;
@@ -130,6 +132,11 @@ export abstract class TableComponent implements OnInit {
 
   protected onSort(event: SortEvent): void {
     this.tableService.onSort(event);
+  }
+
+  protected setTableFilters(tableFilters: TableFilters): void {
+    this.tableFilters = tableFilters;
+    this.tableService.setTableFilters(tableFilters);
   }
 
   private _openDialog(): void {
