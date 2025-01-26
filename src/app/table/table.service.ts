@@ -29,8 +29,18 @@ export abstract class TableService {
 
   private readonly _hiddenColumnsKey = `${this._localStorageKey}-hidden-columns`;
 
-  private readonly _tableState?: TableState =
-    this._localStorageService.retrieve(this._localStorageKey);
+  // У ngx-webstorage срабатывает какое-то кэширование при изменении состояния таблицы,
+  // поэтому тут переделано на обычный localStorage.
+  // private readonly _tableState?: TableState =
+  //   this._localStorageService.retrieve(this._localStorageKey);
+
+  private readonly _tableStateItem = localStorage.getItem(
+    this._localStorageKey,
+  );
+
+  private readonly _tableState?: TableState = this._tableStateItem
+    ? JSON.parse(this._tableStateItem)
+    : undefined;
 
   private _filters: Record<string, string> = {};
   private _filterValues: Record<string, string> = {};
