@@ -50,6 +50,7 @@
         appendTo="body"
         formControlName="position"
         optionLabel="name"
+        showClear
         [loading]="isPositionNamesLoading()"
         [options]="(positionNames$ | async) ?? []"
         (onChange)="selectedPosition.set($event.value)"

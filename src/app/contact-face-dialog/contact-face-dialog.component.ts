@@ -51,7 +51,7 @@ export class ContactFaceDialogComponent extends DialogComponent {
 
   protected readonly form = this._fb.group({
     company: [this.selectedCompany(), Validators.required],
-    position: [this.selectedPosition(), Validators.required],
+    position: [this.selectedPosition()],
     name: this._fb.group({
       last: [this._contactFace?.name.last ?? '', Validators.required],
       first: [this._contactFace?.name.first ?? '', Validators.required],
