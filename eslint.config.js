@@ -44,6 +44,9 @@ module.exports = tseslint.config(
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error"
     },
+    ignores: [
+      "src/api/*",
+    ]
   },
   {
     files: ["**/*.html"],
