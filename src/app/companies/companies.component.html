@@ -1,4 +1,3 @@
-@let addedItemIdsValue = addedItemIds();
 @let findAllResultValue = findAllResult();
 
 <div class="h-full">
@@ -130,7 +129,7 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-company let-columns="columns">
-      @let isAddedItem = addedItemIdsValue.includes(company.id);
+      @let isAddedItem = addedItemIds().includes(company.id);
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
         @for (column of columns; track column.field) {

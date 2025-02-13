@@ -1,4 +1,10 @@
-import { DestroyRef, inject, signal, WritableSignal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LocalStorageService } from 'ngx-webstorage';
 import { MessageService, SortEvent, TableState } from 'primeng/api';
@@ -22,12 +28,18 @@ import {
 export abstract class TableService {
   private readonly _localStorageService = inject(LocalStorageService);
 
+  private readonly _addedItemIds = signal<number[]>([]);
+
   private readonly _localStorageKey = this.constructor.name
     .replace('_', '')
     .replace('Service', '')
     .toLowerCase();
 
   private readonly _hiddenColumnsKey = `${this._localStorageKey}-hidden-columns`;
+
+  private readonly _hiddenColumns = signal<string[]>(
+    this._localStorageService.retrieve(this._hiddenColumnsKey) ?? ['id'],
+  );
 
   // У ngx-webstorage срабатывает какое-то кэширование при изменении состояния таблицы,
   // поэтому тут переделано на обычный localStorage.
@@ -37,6 +49,8 @@ export abstract class TableService {
   private readonly _tableStateItem = localStorage.getItem(
     this._localStorageKey,
   );
+
+  private readonly _isLoading = signal<boolean>(false);
 
   private readonly _tableState?: TableState = this._tableStateItem
     ? JSON.parse(this._tableStateItem)
@@ -66,13 +80,9 @@ export abstract class TableService {
   /* eslint-enable @typescript-eslint/no-explicit-any */
   abstract readonly findAllResult: WritableSignal<FindAll | null>;
 
-  readonly addedItemIds = signal<number[]>([]);
-
-  readonly hiddenColumns = signal<string[]>(
-    this._localStorageService.retrieve(this._hiddenColumnsKey) ?? ['id'],
-  );
-
-  readonly isLoading = signal<boolean>(false);
+  readonly addedItemIds = computed(() => this._addedItemIds());
+  readonly hiddenColumns = computed(() => this._hiddenColumns());
+  readonly isLoading = computed(() => this._isLoading());
 
   readonly rowsPerPage = signal<number>(
     this._tableState?.rows ?? DEFAULT_ROWS_PER_PAGE,
@@ -92,12 +102,12 @@ export abstract class TableService {
   }
 
   create<T extends Item>(params: { body: T }): void {
-    this.isLoading.set(true);
+    this._isLoading.set(true);
 
     this.apiService
       .invoke(this.createFn, params)
       .pipe(
-        finalize(() => this.isLoading.set(false)),
+        finalize(() => this._isLoading.set(false)),
         catchError(() => {
           const item = { name: params.body.name } as Item;
 
@@ -128,17 +138,17 @@ export abstract class TableService {
 
         this.findAllResult.set(findAllResult);
 
-        const addedItemIds = this.addedItemIds();
+        const addedItemIds = this._addedItemIds();
         addedItemIds.push(item.id);
 
-        this.addedItemIds.set(addedItemIds);
+        this._addedItemIds.set(addedItemIds);
       });
   }
 
   load(offset = 0, limit = this.rowsPerPage()): void {
-    this.isLoading.set(true);
+    this._isLoading.set(true);
     this._initFilters();
-    this.addedItemIds.set([]);
+    this._addedItemIds.set([]);
 
     const params = {
       offset,
@@ -151,7 +161,7 @@ export abstract class TableService {
     this.apiService
       .invoke(this.findAllFn, params)
       .pipe(
-        finalize(() => this.isLoading.set(false)),
+        finalize(() => this._isLoading.set(false)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((result: FindAll) => this.findAllResult.set(result));
@@ -174,7 +184,7 @@ export abstract class TableService {
   }
 
   onHiddenColumnsChange(hiddenColumns: string[]): void {
-    this.hiddenColumns.set(hiddenColumns);
+    this._hiddenColumns.set(hiddenColumns);
     this._localStorageService.store(this._hiddenColumnsKey, hiddenColumns);
   }
 
@@ -194,12 +204,12 @@ export abstract class TableService {
   }
 
   remove<T extends Item>(item: T): void {
-    this.isLoading.set(true);
+    this._isLoading.set(true);
 
     this.apiService
       .invoke(this.removeFn, item)
       .pipe(
-        finalize(() => this.isLoading.set(false)),
+        finalize(() => this._isLoading.set(false)),
         catchError(() => {
           const result: DeleteResultDto = { affected: null, raw: {} };
 
@@ -290,12 +300,12 @@ export abstract class TableService {
   }
 
   update<T extends Item>(params: { id: number; body: T }): void {
-    this.isLoading.set(true);
+    this._isLoading.set(true);
 
     this.apiService
       .invoke(this.updateFn, params)
       .pipe(
-        finalize(() => this.isLoading.set(false)),
+        finalize(() => this._isLoading.set(false)),
         catchError(() => {
           const item = { name: params.body.name } as Item;
 
