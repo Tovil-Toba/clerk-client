@@ -8,6 +8,7 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
+import { Textarea } from 'primeng/textarea';
 
 import { Company } from '../../api/models/company';
 import { ContactFace } from '../../api/models/contact-face';
@@ -18,7 +19,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-contact-face-dialog',
-  imports: [AsyncPipe, InputText, ReactiveFormsModule, Select],
+  imports: [AsyncPipe, InputText, ReactiveFormsModule, Select, Textarea],
   templateUrl: './contact-face-dialog.component.html',
   providers: [CompaniesService, ContactFacePositionsService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,9 +54,9 @@ export class ContactFaceDialogComponent extends DialogComponent {
     company: [this.selectedCompany(), Validators.required],
     position: [this.selectedPosition()],
     name: this._fb.group({
-      last: [this._contactFace?.name.last ?? '', Validators.required],
-      first: [this._contactFace?.name.first ?? '', Validators.required],
-      middle: [this._contactFace?.name.middle ?? ''],
+      last: [this._contactFace?.name?.last ?? '', Validators.required],
+      first: [this._contactFace?.name?.first ?? '', Validators.required],
+      middle: [this._contactFace?.name?.middle ?? ''],
     }),
     phone: [this._contactFace?.phone ?? ''],
     email: [this._contactFace?.email ?? ''],

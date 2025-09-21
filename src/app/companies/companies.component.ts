@@ -8,11 +8,14 @@ import {
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { TableModule } from 'primeng/table';
+import { Tooltip } from 'primeng/tooltip';
 
 import { CompanyCategoriesService } from '../company-categories/company-categories.service';
 import { CompanyDialogComponent } from '../company-dialog/company-dialog.component';
+import { getHeaderMenuItem } from '../header/header-menu-items';
 import { ManagersService } from '../managers/managers.service';
 import { UserNameShortPipe } from '../shared/user-name-short.pipe';
 import { TableComponent } from '../table/table.component';
@@ -34,6 +37,8 @@ import { COMPANY_COLUMNS } from './company-columns';
     TableHeaderComponent,
     TableModule,
     UserNameShortPipe,
+    Ripple,
+    Tooltip,
   ],
   providers: [CompaniesService, CompanyCategoriesService, ManagersService],
   templateUrl: './companies.component.html',
@@ -49,6 +54,14 @@ export class CompaniesComponent extends TableComponent implements OnInit {
 
   protected readonly companyCategoryNames$ =
     this._companyCategoriesService.names$;
+
+  protected readonly companiesMenuItem = getHeaderMenuItem('companies');
+
+  protected readonly companyCategoriesMenuItem =
+    getHeaderMenuItem('company-categories');
+
+  protected readonly contactsMenuItem = getHeaderMenuItem('contacts');
+  protected readonly contactFacesMenuItem = getHeaderMenuItem('contact-faces');
 
   protected readonly isCompanyCategoryNamesLoading =
     this._companyCategoriesService.isNamesLoading;

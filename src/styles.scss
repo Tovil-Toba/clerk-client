@@ -22,3 +22,9 @@
   top: unset;
   bottom: 100%;
 }
+
+// Удалить после обновления на 20-ый Прайм
+.p-datatable-scrollable .p-datatable-frozen-column {
+  position: sticky;
+  background: var(--p-datatable-header-cell-background); /* Or a specific color */
+}

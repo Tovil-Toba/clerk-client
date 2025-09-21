@@ -1,7 +1,16 @@
 @let columnsValue = columns();
+@let iconValue = icon();
 
-<div class="flex items-center justify-between">
-  <span class="text-xl font-bold">{{ name() }}</span>
+<div class="flex items-center justify-between gap-2">
+  <div class="flex grow items-center justify-between">
+    <span class="text-xl font-bold">
+      @if (iconValue) {
+        <i [class]="iconValue"></i>
+      }
+      {{ name() }}
+    </span>
+    <ng-content />
+  </div>
 
   <div class="flex gap-2">
     <p-multi-select

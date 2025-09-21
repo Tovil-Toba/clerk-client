@@ -21,6 +21,7 @@ import { Column } from '../shared/column.model';
 export class TableHeaderComponent implements OnInit {
   columns = input<Column[]>([]);
   hiddenColumns = input<string[]>([]);
+  icon = input<string>();
   name = input<string>();
 
   add = output<void>();

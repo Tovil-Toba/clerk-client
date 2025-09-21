@@ -31,10 +31,10 @@
   >
     <ng-template pTemplate="caption">
       <app-table-header
-        [name]="companyCategoriesMenuItem?.label"
+        [name]="contactOffersMenuItem?.label"
         [columns]="columns"
-        [icon]="companyCategoriesMenuItem?.icon"
-        (add)="onAdd('Добавление категории компаний')"
+        [icon]="contactOffersMenuItem?.icon"
+        (add)="onAdd('Добавление предложения контактов')"
         (clearFilters)="onClearFilters(table)"
         [hiddenColumns]="hiddenColumns()"
         (hiddenColumnsChange)="onHiddenColumnsChange($event)"
@@ -61,12 +61,12 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-companyCategory let-columns="columns">
-      @let isAddedItem = addedItemIds().includes(companyCategory.id);
+    <ng-template pTemplate="body" let-contactOffer let-columns="columns">
+      @let isAddedItem = addedItemIds().includes(contactOffer.id);
 
       <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
         @for (column of columns; track column.field) {
-          @let value = getFieldValue(companyCategory, column.field);
+          @let value = getFieldValue(contactOffer, column.field);
           <td>
             {{
               column.filterType === "date"
@@ -77,9 +77,9 @@
         }
         <td pFrozenColumn alignFrozen="right">
           <app-table-actions
-            (delete)="onDelete(companyCategory, 'Удаление категории компаний')"
+            (delete)="onDelete(contactOffer, 'Удаление предложения контактов')"
             (edit)="
-              onEdit(companyCategory, 'Редактирование категории компаний')
+              onEdit(contactOffer, 'Редактирование предложения контактов')
             "
           />
         </td>
@@ -88,7 +88,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="999">Категории компаний не найдены.</td>
+        <td colspan="999">Предложения контактов не найдены.</td>
       </tr>
     </ng-template>
   </p-table>

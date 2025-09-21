@@ -1,14 +1,17 @@
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { PrimeTemplate } from 'primeng/api';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FilterMetadata, PrimeTemplate } from 'primeng/api';
+import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 
+import { FindNameDto } from '../../api/models/find-name-dto';
 import { CompaniesService } from '../companies/companies.service';
 import { ContactFaceDialogComponent } from '../contact-face-dialog/contact-face-dialog.component';
 import { ContactFacePositionsService } from '../contact-face-positions/contact-face-positions.service';
+import { getHeaderMenuItem } from '../header/header-menu-items';
 import { TableFilters } from '../shared/table-filters.model';
 import { TableComponent } from '../table/table.component';
 import { TableActionsComponent } from '../table-actions/table-actions.component';
@@ -27,6 +30,8 @@ import { ContactFacesService } from './contact-faces.service';
     TableActionsComponent,
     TableHeaderComponent,
     TableModule,
+    Button,
+    RouterLink,
   ],
   providers: [
     CompaniesService,
@@ -49,6 +54,11 @@ export class ContactFacesComponent extends TableComponent {
   protected readonly tableService = inject(ContactFacesService);
 
   protected readonly companyNames$ = this._companiesService.names$;
+  protected readonly contactFacesMenuItem = getHeaderMenuItem('contact-faces');
+
+  protected readonly contactFacePositionsMenuItem = getHeaderMenuItem(
+    'contact-face-positions',
+  );
 
   protected readonly contactFacePositionNames$ =
     this._contactFacePositionsService.names$;
@@ -63,6 +73,12 @@ export class ContactFacesComponent extends TableComponent {
     super();
 
     this._checkFilters();
+  }
+
+  protected getSelectedCompany(): FindNameDto | undefined {
+    const tableFilters = this.tableService.tableFilters;
+
+    return (tableFilters['companyId'] as FilterMetadata)?.value;
   }
 
   private _checkFilters(): void {

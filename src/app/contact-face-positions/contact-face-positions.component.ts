@@ -4,6 +4,7 @@ import { PrimeTemplate } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 
 import { ContactFacePositionDialogComponent } from '../contact-face-position-dialog/contact-face-position-dialog.component';
+import { getHeaderMenuItem } from '../header/header-menu-items';
 import { TableComponent } from '../table/table.component';
 import { TableActionsComponent } from '../table-actions/table-actions.component';
 import { TableHeaderComponent } from '../table-header/table-header.component';
@@ -27,4 +28,8 @@ export class ContactFacePositionsComponent extends TableComponent {
   protected readonly columns = CONTACT_FACE_POSITION_COLUMNS;
   protected readonly dialogComponent = ContactFacePositionDialogComponent;
   protected readonly tableService = inject(ContactFacePositionsService);
+
+  protected readonly contactFacePositionsMenuItem = getHeaderMenuItem(
+    'contact-face-positions',
+  );
 }

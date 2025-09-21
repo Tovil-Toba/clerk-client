@@ -16,6 +16,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'contacts',
+    loadComponent: () =>
+      import('./contacts/contacts.component').then((m) => m.ContactsComponent),
+  },
+  {
     path: 'company-categories',
     loadComponent: () =>
       import('./company-categories/company-categories.component').then(
@@ -34,6 +39,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./contact-face-positions/contact-face-positions.component').then(
         (m) => m.ContactFacePositionsComponent,
+      ),
+  },
+  {
+    path: 'contact-offers',
+    loadComponent: () =>
+      import('./contact-offers/contact-offers.component').then(
+        (m) => m.ContactOffersComponent,
       ),
   },
   {

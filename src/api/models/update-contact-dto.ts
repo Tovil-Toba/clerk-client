@@ -56,6 +56,11 @@ export interface UpdateContactDto {
   offer?: ContactFacePosition;
 
   /**
+   * Идентификатор менеджера
+   */
+  offerId?: number | null;
+
+  /**
    * Контактные телефоны
    */
   phones?: string;

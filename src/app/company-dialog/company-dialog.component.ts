@@ -9,6 +9,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SharedModule } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
+import { Textarea } from 'primeng/textarea';
 
 import { Company } from '../../api/models/company';
 import { CompanyCategory } from '../../api/models/company-category';
@@ -26,6 +27,7 @@ import { UserNameLongPipe } from '../shared/user-name-long.pipe';
     ReactiveFormsModule,
     Select,
     SharedModule,
+    Textarea,
     UserNameLongPipe,
   ],
   providers: [CompanyCategoriesService, ManagersService],

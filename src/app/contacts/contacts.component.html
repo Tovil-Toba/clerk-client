@@ -1,0 +1,291 @@
+@let findAllResultValue = findAllResult();
+
+<div class="h-full">
+  <p-table
+    #table
+    alwaysShowPaginator="true"
+    [columns]="selectedColumns()"
+    [filters]="tableFilters"
+    lazy
+    [loading]="isLoading()"
+    paginator
+    paginatorDropdownAppendTo="table"
+    paginatorStyleClass="dropdown-top"
+    [resizableColumns]="false"
+    [rows]="rowsPerPage()"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    scrollable
+    scrollHeight="flex"
+    showGridlines
+    size="small"
+    [sortField]="sortField"
+    [sortOrder]="sortOrder"
+    [stateKey]="localStorageKey"
+    stateStorage="local"
+    styleClass="paginator-dropdown-top"
+    [totalRecords]="findAllResultValue?.count ?? 0"
+    [value]="findAllResultValue?.items ?? []"
+    (onFilter)="onFilter($event)"
+    (onPage)="onPageChange($event)"
+    (onSort)="onSort($event)"
+  >
+    <ng-template pTemplate="caption">
+      <app-table-header
+        [name]="contactsMenuItem?.label"
+        [columns]="columns"
+        [icon]="contactsMenuItem?.icon"
+        (add)="
+          onAdd('Добавление контакта', {
+            company: getSelectedCompany(),
+          })
+        "
+        (clearFilters)="onClearFilters(table)"
+        [hiddenColumns]="hiddenColumns()"
+        (hiddenColumnsChange)="onHiddenColumnsChange($event)"
+      >
+        <p-button
+          [label]="contactOffersMenuItem?.label"
+          [icon]="contactOffersMenuItem?.icon"
+          [routerLink]="contactOffersMenuItem?.routerLink"
+          severity="secondary"
+          text
+        />
+      </app-table-header>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+      <tr [style.height.px]="46">
+        @for (column of columns; track column.field) {
+          <th class="text-nowrap" [pSortableColumn]="column.field">
+            {{ column.header }}
+            <p-sortIcon [field]="column.field" />
+          </th>
+        }
+        <th pFrozenColumn alignFrozen="right">Действия</th>
+      </tr>
+      <tr>
+        @for (column of columns; track column.field) {
+          <th>
+            @if (column.field === "company.name") {
+              <p-columnFilter
+                field="companyId"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-select
+                    appendTo="body"
+                    dataKey="id"
+                    filter
+                    [loading]="isCompanyNamesLoading()"
+                    [(ngModel)]="value!"
+                    [options]="(companyNames$ | async) ?? []"
+                    optionLabel="name"
+                    (onChange)="filter($event.value)"
+                  />
+                </ng-template>
+              </p-columnFilter>
+            } @else if (column.field === "manager.name.last") {
+              <p-columnFilter
+                field="managerId"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-select
+                    appendTo="body"
+                    dataKey="id"
+                    filter
+                    [loading]="isManagerNamesLoading()"
+                    [(ngModel)]="value!"
+                    [options]="(managerNames$ | async) ?? []"
+                    optionLabel="name.last"
+                    (onChange)="filter($event.value)"
+                  >
+                    <ng-template let-option pTemplate="selectedItem">
+                      @if (option?.name) {
+                        <div class="flex items-center gap-2">
+                          <span>
+                            {{ option.name | userNameShort }}
+                          </span>
+                        </div>
+                      }
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      <div class="inline-block align-middle">
+                        <span class="ml-1 mt-1">
+                          {{ option.name | userNameShort }}
+                        </span>
+                      </div>
+                    </ng-template>
+                  </p-select>
+                </ng-template>
+              </p-columnFilter>
+            } @else if (column.field === "contactFace.name.last") {
+              <p-columnFilter
+                field="contactFaceId"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-select
+                    appendTo="body"
+                    dataKey="id"
+                    filter
+                    [loading]="isContactFaceNamesLoading()"
+                    [(ngModel)]="value!"
+                    [options]="(contactFaceNames$ | async) ?? []"
+                    optionLabel="name.last"
+                    (onChange)="filter($event.value)"
+                  >
+                    <ng-template pTemplate="selectedItem">
+                      @if (value?.name) {
+                        <div class="flex items-center gap-2">
+                          <span>
+                            {{ value.name | userNameShort }}
+                          </span>
+                        </div>
+                      }
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                      <div class="inline-block align-middle">
+                        <span class="ml-1 mt-1">
+                          {{ option.name | userNameShort }}
+                        </span>
+                      </div>
+                    </ng-template>
+                  </p-select>
+                </ng-template>
+              </p-columnFilter>
+            } @else if (column.field === "contactFace.position.name") {
+              <p-columnFilter
+                field="contactFace.positionId"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-select
+                    appendTo="body"
+                    dataKey="id"
+                    filter
+                    [loading]="isContactFacePositionNamesLoading()"
+                    [(ngModel)]="value!"
+                    [options]="(contactFacePositionNames$ | async) ?? []"
+                    optionLabel="name"
+                    (onChange)="filter($event.value)"
+                  />
+                </ng-template>
+              </p-columnFilter>
+            } @else if (column.field === "offer.name") {
+              <p-columnFilter
+                field="offerId"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-select
+                    appendTo="body"
+                    dataKey="id"
+                    filter
+                    [loading]="isContactOfferNamesLoading()"
+                    [(ngModel)]="value!"
+                    [options]="(contactOfferNames$ | async) ?? []"
+                    optionLabel="name"
+                    (onChange)="filter($event.value)"
+                  />
+                </ng-template>
+              </p-columnFilter>
+            } @else if (column.field === "status") {
+              <p-columnFilter
+                field="status"
+                matchMode="equals"
+                [showMenu]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-select
+                    appendTo="body"
+                    dataKey="id"
+                    filter
+                    [(ngModel)]="value!"
+                    [options]="contactStatusOptions"
+                    optionLabel="name"
+                    (onChange)="filter($event.value)"
+                  />
+                </ng-template>
+              </p-columnFilter>
+            } @else {
+              <p-columnFilter
+                [field]="column.field"
+                [type]="column.filterType"
+              />
+            }
+          </th>
+        }
+        <th pFrozenColumn alignFrozen="right"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-contact let-columns="columns">
+      @let isAddedItem = addedItemIds().includes(contact.id);
+
+      <tr [class.bg-green-100]="isAddedItem" [class.text-black]="isAddedItem">
+        @for (column of columns; track column.field) {
+          @let value = getFieldValue(contact, column.field);
+          <td>
+            @if (column.field === "manager.name.last" && contact.manager) {
+              {{ contact.manager.name | userNameShort }}
+            } @else if (
+              column.field === "contactFace.name.last" && contact.contactFace
+            ) {
+              {{ contact.contactFace.name | userNameShort }}
+            } @else if (column.field === "offer.name" && contact.offer) {
+              {{ contact.offer.name }}
+            } @else if (column.field === "status") {
+              {{ value | contactStatus }}
+            } @else if (column.filterType === "date") {
+              {{ value | date: "dd.MM.yyyy" }}
+            } @else {
+              {{ value }}
+            }
+          </td>
+        }
+        <td pFrozenColumn alignFrozen="right">
+          <app-table-actions
+            (delete)="onDelete(contact, 'Удаление контакта')"
+            (edit)="onEdit(contact, 'Редактирование контакта')"
+          />
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="999">Контакты не найдены.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -145,6 +145,27 @@ export interface ContactsControllerFindAll$Params {
   'contactFace.name.middle-orderPlace'?: number;
 
 /**
+ * **Идентификатор должности контактного лица**
+ */
+  'contactFace.positionId'?: string;
+
+/**
+ * Фильтр
+ */
+  'contactFace.positionId-filter'?: NumberFilterEnum;
+
+/**
+ * Порядок сортировки
+ */
+  'contactFace.positionId-order'?: OrderEnum;
+
+/**
+ * Приоритет сортировки  
+ * *Чем меньше, тем приоритетнее*
+ */
+  'contactFace.positionId-orderPlace'?: number;
+
+/**
  * **Идентификатор контактного лица**
  */
   contactFaceId?: string;
@@ -350,25 +371,25 @@ export interface ContactsControllerFindAll$Params {
   'nextContactDate-orderPlace'?: number;
 
 /**
- * **Предложение**
+ * **Идентификатор предложения контакта**
  */
-  'offer.name'?: string;
+  offerId?: string;
 
 /**
  * Фильтр
  */
-  'offer.name-filter'?: StringFilterEnum;
+  'offerId-filter'?: NumberFilterEnum;
 
 /**
  * Порядок сортировки
  */
-  'offer.name-order'?: OrderEnum;
+  'offerId-order'?: OrderEnum;
 
 /**
  * Приоритет сортировки  
  * *Чем меньше, тем приоритетнее*
  */
-  'offer.name-orderPlace'?: number;
+  'offerId-orderPlace'?: number;
 
 /**
  * **Телефоны**
@@ -395,6 +416,17 @@ export interface ContactsControllerFindAll$Params {
  * **Статус**
  */
   status?: ContactStatusEnum;
+
+/**
+ * Порядок сортировки
+ */
+  'status-order'?: OrderEnum;
+
+/**
+ * Приоритет сортировки  
+ * *Чем меньше, тем приоритетнее*
+ */
+  'status-orderPlace'?: number;
 
 /**
  * **Дата обновления**
@@ -456,6 +488,10 @@ export function contactsControllerFindAll(http: HttpClient, rootUrl: string, par
     rb.query('contactFace.name.middle-filter', params['contactFace.name.middle-filter'], {"explode":false});
     rb.query('contactFace.name.middle-order', params['contactFace.name.middle-order'], {"explode":false});
     rb.query('contactFace.name.middle-orderPlace', params['contactFace.name.middle-orderPlace'], {});
+    rb.query('contactFace.positionId', params['contactFace.positionId'], {"explode":false});
+    rb.query('contactFace.positionId-filter', params['contactFace.positionId-filter'], {"explode":false});
+    rb.query('contactFace.positionId-order', params['contactFace.positionId-order'], {"explode":false});
+    rb.query('contactFace.positionId-orderPlace', params['contactFace.positionId-orderPlace'], {});
     rb.query('contactFaceId', params.contactFaceId, {"explode":false});
     rb.query('contactFaceId-filter', params['contactFaceId-filter'], {"explode":false});
     rb.query('contactFaceId-order', params['contactFaceId-order'], {"explode":false});
@@ -495,15 +531,17 @@ export function contactsControllerFindAll(http: HttpClient, rootUrl: string, par
     rb.query('nextContactDate-filter', params['nextContactDate-filter'], {"explode":false});
     rb.query('nextContactDate-order', params['nextContactDate-order'], {"explode":false});
     rb.query('nextContactDate-orderPlace', params['nextContactDate-orderPlace'], {});
-    rb.query('offer.name', params['offer.name'], {"explode":false});
-    rb.query('offer.name-filter', params['offer.name-filter'], {"explode":false});
-    rb.query('offer.name-order', params['offer.name-order'], {"explode":false});
-    rb.query('offer.name-orderPlace', params['offer.name-orderPlace'], {});
+    rb.query('offerId', params.offerId, {"explode":false});
+    rb.query('offerId-filter', params['offerId-filter'], {"explode":false});
+    rb.query('offerId-order', params['offerId-order'], {"explode":false});
+    rb.query('offerId-orderPlace', params['offerId-orderPlace'], {});
     rb.query('phones', params.phones, {"explode":false});
     rb.query('phones-filter', params['phones-filter'], {"explode":false});
     rb.query('phones-order', params['phones-order'], {"explode":false});
     rb.query('phones-orderPlace', params['phones-orderPlace'], {});
     rb.query('status', params.status, {"explode":false});
+    rb.query('status-order', params['status-order'], {"explode":false});
+    rb.query('status-orderPlace', params['status-orderPlace'], {});
     rb.query('updatedAt', params.updatedAt, {"explode":false});
     rb.query('updatedAt-filter', params['updatedAt-filter'], {"explode":false});
     rb.query('updatedAt-order', params['updatedAt-order'], {"explode":false});

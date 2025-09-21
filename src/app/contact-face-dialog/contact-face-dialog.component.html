@@ -69,7 +69,13 @@
 
     <div class="flex flex-col gap-2">
       <label for="notes">Примечания</label>
-      <input pInputText id="notes" formControlName="notes" />
+      <textarea
+        formControlName="notes"
+        id="notes"
+        pTextarea
+        pInputText
+        rows="3"
+      ></textarea>
     </div>
   </div>
 </form>

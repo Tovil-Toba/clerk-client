@@ -75,9 +75,9 @@ export abstract class TableComponent implements OnInit {
     return get(row, field);
   }
 
-  protected onAdd(dialogHeader?: string): void {
+  protected onAdd(dialogHeader?: string, item?: Item): void {
     this.dialogHeader = dialogHeader ?? 'Добавление';
-    this.item = undefined;
+    this.item = item;
     this._openDialog();
   }
 

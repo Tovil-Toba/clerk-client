@@ -84,6 +84,11 @@ export interface Contact {
   offer?: ContactFacePosition;
 
   /**
+   * Идентификатор менеджера
+   */
+  offerId?: number | null;
+
+  /**
    * Контактные телефоны
    */
   phones?: string;

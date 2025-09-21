@@ -1,8 +1,11 @@
 <div class="flex flex-nowrap gap-1 p-1">
+  <ng-content />
+
   <p-button
-    icon="pi pi-pencil"
+    icon="fa-solid fa-pen"
     pButton
     pRipple
+    pTooltip="Редактировать"
     rounded
     severity="secondary"
     text
@@ -11,9 +14,10 @@
   ></p-button>
 
   <p-button
-    icon="pi pi-trash"
+    icon="fa-solid fa-trash-can"
     pButton
     pRipple
+    pTooltip="Удалить"
     rounded
     severity="secondary"
     text

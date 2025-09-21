@@ -11,11 +11,17 @@ import { RequestBuilder } from '../../request-builder';
 import { FindUserNamesResultDto } from '../../models/find-user-names-result-dto';
 
 export interface ContactFacesControllerFindNames$Params {
+
+/**
+ * Идентификатор компании
+ */
+  companyId?: string;
 }
 
 export function contactFacesControllerFindNames(http: HttpClient, rootUrl: string, params?: ContactFacesControllerFindNames$Params, context?: HttpContext): Observable<StrictHttpResponse<FindUserNamesResultDto>> {
   const rb = new RequestBuilder(rootUrl, contactFacesControllerFindNames.PATH, 'get');
   if (params) {
+    rb.query('companyId', params.companyId, {});
   }
 
   return http.request(

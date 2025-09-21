@@ -58,19 +58,19 @@ export abstract class TableService {
 
   private _filters: Record<string, string> = {};
   private _filterValues: Record<string, string> = {};
-
-  private _order =
-    (this._tableState?.sortOrder && this._tableState.sortOrder < 0) ||
-    DEFAULT_SORT_ORDER < 0
-      ? OrderEnum.Desc
-      : OrderEnum.Asc;
-
-  private _orderField = `${this._tableState?.sortField ?? DEFAULT_SORT_FIELD}-order`;
   private _tableFilters: TableFilters = this._tableState?.filters ?? {};
 
   protected readonly apiService = inject(ApiService);
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly messageService = inject(MessageService);
+
+  protected order =
+    (this._tableState?.sortOrder && this._tableState.sortOrder < 0) ||
+    DEFAULT_SORT_ORDER < 0
+      ? OrderEnum.Desc
+      : OrderEnum.Asc;
+
+  protected orderField = `${this._tableState?.sortField ?? DEFAULT_SORT_FIELD}-order`;
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   abstract readonly createFn: ApiFnRequired<any, any>;
@@ -91,8 +91,16 @@ export abstract class TableService {
   readonly sortField = this._tableState?.sortField ?? DEFAULT_SORT_FIELD;
   readonly sortOrder = this._tableState?.sortOrder ?? DEFAULT_SORT_ORDER;
 
+  protected get tableState(): TableState | undefined {
+    return this._tableState;
+  }
+
   get localStorageKey(): string {
     return this._localStorageKey;
+  }
+
+  get tableFilters(): TableFilters {
+    return this._tableFilters;
   }
 
   clearFilters(): void {
@@ -145,6 +153,10 @@ export abstract class TableService {
       });
   }
 
+  getFilterValue(key: string): string {
+    return this._filterValues[key];
+  }
+
   load(offset = 0, limit = this.rowsPerPage()): void {
     this._isLoading.set(true);
     this._initFilters();
@@ -153,7 +165,7 @@ export abstract class TableService {
     const params = {
       offset,
       limit,
-      [this._orderField]: this._order,
+      [this.orderField]: this.order,
       ...this._filters,
       ...this._filterValues,
     };
@@ -195,10 +207,10 @@ export abstract class TableService {
   }
 
   onSort(event: SortEvent): void {
-    this._order =
+    this.order =
       event?.order && event.order < 0 ? OrderEnum.Desc : OrderEnum.Asc;
 
-    this._orderField = `${event.field}-order`;
+    this.orderField = `${event.field}-order`;
 
     this.load();
   }
@@ -262,6 +274,7 @@ export abstract class TableService {
 
       return;
     }
+
     Object.entries(this._tableFilters).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         return;

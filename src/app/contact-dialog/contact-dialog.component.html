@@ -1,0 +1,154 @@
+<form id="dialog-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
+      <label for="company">Компания <span class="text-red-600">*</span></label>
+      <p-select
+        id="company"
+        dataKey="id"
+        appendTo="body"
+        formControlName="company"
+        optionLabel="name"
+        [loading]="isCompanyNamesLoading()"
+        [options]="(companyNames$ | async) ?? []"
+        (onChange)="loadContactFaceNames($event.value)"
+      />
+      @if (company.invalid && (company.dirty || !company.untouched)) {
+        <small class="text-red-600">Укажите компанию.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="manager">Менеджер</label>
+      <p-select
+        appendTo="body"
+        dataKey="id"
+        formControlName="manager"
+        id="manager"
+        [loading]="isManagerNamesLoading()"
+        [options]="(managerNames$ | async) ?? []"
+        optionLabel="name.last"
+      >
+        <ng-template let-option pTemplate="selectedItem">
+          <div class="flex items-center gap-2">
+            <span>
+              {{ option.name | userNameShort }}
+            </span>
+          </div>
+        </ng-template>
+        <ng-template let-option pTemplate="item">
+          <div class="inline-block align-middle">
+            <span class="ml-1 mt-1">
+              {{ option.name | userNameShort }}
+            </span>
+          </div>
+        </ng-template>
+      </p-select>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="contactDate">Дата контакта</label>
+      <p-datepicker
+        appendTo="body"
+        dateFormat="dd.mm.yy"
+        formControlName="contactDate"
+        id="contactDate"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="status">Состояние</label>
+      <p-select
+        appendTo="body"
+        dataKey="id"
+        formControlName="status"
+        id="status"
+        [options]="contactStatusOptions"
+        optionLabel="name"
+        optionValue="id"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="nextContactDate">Дата следующего контакта</label>
+      <p-datepicker
+        appendTo="body"
+        dateFormat="dd.mm.yy"
+        formControlName="nextContactDate"
+        id="nextContactDate"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="contactFace">Контактное лицо</label>
+      <p-select
+        appendTo="body"
+        dataKey="id"
+        formControlName="contactFace"
+        id="contactFace"
+        [loading]="isContactFaceNamesLoading()"
+        [options]="(contactFaceNames$ | async) ?? []"
+        optionLabel="name.last"
+      >
+        <ng-template let-option pTemplate="selectedItem">
+          <div class="flex items-center gap-2">
+            <span>
+              {{ option.name | userNameShort }}
+            </span>
+          </div>
+        </ng-template>
+        <ng-template let-option pTemplate="item">
+          <div class="inline-block align-middle">
+            <span class="ml-1 mt-1">
+              {{ option.name | userNameShort }}
+            </span>
+          </div>
+        </ng-template>
+      </p-select>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="phones">Телефон</label>
+      <input pInputText id="phones" formControlName="phones" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="emails">Адрес электронной почты</label>
+      <input pInputText id="emails" formControlName="emails" />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="notesOnContactFace">Примечания по контактному лицу</label>
+      <textarea
+        formControlName="notesOnContactFace"
+        id="notesOnContactFace"
+        pTextarea
+        pInputText
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="description">Описание</label>
+      <textarea
+        formControlName="description"
+        id="description"
+        pTextarea
+        pInputText
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="offer">Предложение</label>
+      <p-select
+        id="offer"
+        dataKey="id"
+        appendTo="body"
+        formControlName="offer"
+        optionLabel="name"
+        [loading]="isContactOfferNamesLoading()"
+        [options]="(contactOfferNames$ | async) ?? []"
+      />
+    </div>
+  </div>
+</form>

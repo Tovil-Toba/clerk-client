@@ -31,13 +31,26 @@
   >
     <ng-template pTemplate="caption">
       <app-table-header
-        name="Контактные лица"
+        [name]="contactFacesMenuItem?.label"
         [columns]="columns"
-        (add)="onAdd('Добавление контактного лица')"
+        [icon]="contactFacesMenuItem?.icon"
+        (add)="
+          onAdd('Добавление контактного лица', {
+            company: getSelectedCompany(),
+          })
+        "
         (clearFilters)="onClearFilters(table)"
         [hiddenColumns]="hiddenColumns()"
         (hiddenColumnsChange)="onHiddenColumnsChange($event)"
-      />
+      >
+        <p-button
+          [label]="contactFacePositionsMenuItem?.label"
+          [icon]="contactFacePositionsMenuItem?.icon"
+          [routerLink]="contactFacePositionsMenuItem?.routerLink"
+          severity="secondary"
+          text
+        />
+      </app-table-header>
     </ng-template>
 
     <ng-template pTemplate="header" let-columns>
@@ -48,7 +61,7 @@
             <p-sortIcon [field]="column.field" />
           </th>
         }
-        <th>Действия</th>
+        <th pFrozenColumn alignFrozen="right">Действия</th>
       </tr>
       <tr>
         @for (column of columns; track column.field) {
@@ -107,7 +120,7 @@
             }
           </th>
         }
-        <th></th>
+        <th pFrozenColumn alignFrozen="right"></th>
       </tr>
     </ng-template>
 
@@ -125,12 +138,18 @@
             }}
           </td>
         }
-        <td>
+        <td pFrozenColumn alignFrozen="right">
           <app-table-actions
             (delete)="onDelete(contactFace, 'Удаление контактного лица')"
             (edit)="onEdit(contactFace, 'Редактирование контактного лица')"
           />
         </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="999">Контактные лица не найдены.</td>
       </tr>
     </ng-template>
   </p-table>
