@@ -1,19 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer tailwind-base, primeng, tailwind-utilities;
-
-@layer tailwind-base {
-  @tailwind base;
-}
-
-@layer tailwind-utilities {
-  @tailwind components;
-  @tailwind utilities;
-}
+@use "tailwindcss";
+@plugin "tailwindcss-primeui";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @import "primeicons/primeicons.css";
 

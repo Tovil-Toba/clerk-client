@@ -10,7 +10,7 @@ export const PRIME_NG_CONFIG: PrimeNGConfigType = {
     options: {
       cssLayer: {
         name: 'primeng',
-        order: 'tailwind-base, primeng, tailwind-utilities',
+        order: 'theme, base, primeng',
       },
       darkModeSelector: `.${DARK_MODE_CLASS_NAME}`,
     },
