@@ -1,6 +1,6 @@
 @let isDarkModeValue = isDarkMode();
 
-<p-menubar [model]="menuItems">
+<p-menubar class="relative z-3" [model]="menuItems">
   <ng-template pTemplate="start">
     <p-button
       [styleClass]="isDarkModeValue ? 'text-white' : 'text-black'"
