@@ -81,6 +81,7 @@
                     [(ngModel)]="value!"
                     [options]="(companyCategoryNames$ | async) ?? []"
                     optionLabel="name"
+                    showClear
                     (onChange)="filter($event.value)"
                   />
                 </ng-template>
@@ -104,6 +105,7 @@
                     [(ngModel)]="value!"
                     [options]="(managerNames$ | async) ?? []"
                     optionLabel="name.last"
+                    showClear
                     (onChange)="filter($event.value)"
                   >
                     <ng-template pTemplate="selectedItem">
@@ -117,7 +119,7 @@
                     </ng-template>
                     <ng-template let-option pTemplate="item">
                       <div class="inline-block align-middle">
-                        <span class="ml-1 mt-1">
+                        <span class="mt-1 ml-1">
                           {{ option.name | userNameShort }}
                         </span>
                       </div>
