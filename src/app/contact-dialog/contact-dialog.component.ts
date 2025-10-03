@@ -1,5 +1,10 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AsyncPipe, formatDate } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  LOCALE_ID,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePicker, DatePickerModule } from 'primeng/datepicker';
 import { InputText } from 'primeng/inputtext';
@@ -45,6 +50,7 @@ export class ContactDialogComponent extends DialogComponent {
 
   private readonly _fb = new FormBuilder();
   private readonly _contact: Contact = this.dialogConfig.data.item;
+  private readonly _locale = inject(LOCALE_ID);
 
   protected readonly companyNames$ = this._companiesService.names$;
   protected readonly contactFaceNames$ = this._contactFacesService.names$;
@@ -64,17 +70,25 @@ export class ContactDialogComponent extends DialogComponent {
     this._managersService.isNamesLoading;
 
   protected readonly form = this._fb.group({
-    company: [this._contact?.company, Validators.required],
-    manager: [null],
-    contactDate: [''],
-    status: ['PLANNING'],
-    nextContactDate: [''],
-    contactFace: [null],
-    phones: [''],
-    emails: [''],
-    notesOnContactFace: [''],
-    description: [''],
-    offer: [null],
+    company: [this._contact?.company ?? '', Validators.required],
+    manager: [this._contact?.manager ?? null],
+    contactDate: [
+      this._contact?.contactDate
+        ? formatDate(this._contact.contactDate, 'dd.MM.yyyy', this._locale)
+        : '',
+    ],
+    status: [this._contact?.status ?? 'PLANNING'],
+    nextContactDate: [
+      this._contact?.nextContactDate
+        ? formatDate(this._contact.nextContactDate, 'dd.MM.yyyy', this._locale)
+        : '',
+    ],
+    contactFace: [this._contact?.contactFace ?? null],
+    phones: [this._contact?.phones ?? ''],
+    emails: [this._contact?.emails ?? ''],
+    notesOnContactFace: [this._contact?.notesOnContactFace ?? ''],
+    description: [this._contact?.description ?? ''],
+    offer: [this._contact?.offer ?? null],
   });
 
   protected readonly company = this.form.controls.company;

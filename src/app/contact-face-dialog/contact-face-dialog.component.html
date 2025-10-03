@@ -12,26 +12,21 @@
         [options]="(companyNames$ | async) ?? []"
         (onChange)="selectedCompany.set($event.value)"
       />
-      @if (company.invalid && (company.dirty || !company.untouched)) {
+      @if (company.invalid && (company.dirty || company.touched)) {
         <small class="text-red-600">Укажите компанию.</small>
       }
     </div>
 
     <ng-container formGroupName="name">
       <div class="flex flex-col gap-2">
-        <label for="name.last"
-          >Фамилия <span class="text-red-600">*</span></label
-        >
-        <input pInputText id="name.last" formControlName="last" required />
-        @if (lastName.invalid && (lastName.dirty || !lastName.untouched)) {
-          <small class="text-red-600">Введите фамилию.</small>
-        }
+        <label for="name.last">Фамилия </label>
+        <input pInputText id="name.last" formControlName="last" />
       </div>
 
       <div class="flex flex-col gap-2">
         <label for="name.first">Имя <span class="text-red-600">*</span></label>
         <input pInputText id="name.first" formControlName="first" />
-        @if (firstName.invalid && (firstName.dirty || !firstName.untouched)) {
+        @if (firstName.invalid && (firstName.dirty || firstName.touched)) {
           <small class="text-red-600">Введите имя.</small>
         }
       </div>

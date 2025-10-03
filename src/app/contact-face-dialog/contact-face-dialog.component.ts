@@ -54,7 +54,7 @@ export class ContactFaceDialogComponent extends DialogComponent {
     company: [this.selectedCompany(), Validators.required],
     position: [this.selectedPosition()],
     name: this._fb.group({
-      last: [this._contactFace?.name?.last ?? '', Validators.required],
+      last: [this._contactFace?.name?.last ?? ''],
       first: [this._contactFace?.name?.first ?? '', Validators.required],
       middle: [this._contactFace?.name?.middle ?? ''],
     }),
@@ -65,5 +65,4 @@ export class ContactFaceDialogComponent extends DialogComponent {
 
   protected readonly company = this.form.controls.company;
   protected readonly firstName = this.form.controls.name.controls.first;
-  protected readonly lastName = this.form.controls.name.controls.last;
 }

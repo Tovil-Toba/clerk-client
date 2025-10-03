@@ -13,13 +13,18 @@ export const COMPANY_COLUMNS: Column[] = [
     filterType: 'text',
   },
   {
+    field: 'manager.name.last',
+    header: 'Менеджер',
+    filterType: 'text',
+  },
+  {
     field: 'fieldOfActivity',
     header: 'Сфера деятельности',
     filterType: 'text',
   },
   {
-    field: 'notes',
-    header: 'Примечания',
+    field: 'urls',
+    header: 'Сайты',
     filterType: 'text',
   },
   {
@@ -34,17 +39,12 @@ export const COMPANY_COLUMNS: Column[] = [
   },
   {
     field: 'emails',
-    header: 'Адреса электронных почт',
+    header: 'Корпоративные e-mail',
     filterType: 'text',
   },
   {
-    field: 'urls',
-    header: 'Ссылки',
-    filterType: 'text',
-  },
-  {
-    field: 'manager.name.last',
-    header: 'Менеджер',
+    field: 'notes',
+    header: 'Примечания',
     filterType: 'text',
   },
   ...DATE_COLUMNS,
